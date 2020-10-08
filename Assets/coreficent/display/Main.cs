@@ -8,6 +8,8 @@ public class Main : MonoBehaviour
 
     public static Cell[,] cells;
 
+    public static Queue<Cell> activatedCells = new Queue<Cell>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,10 +17,20 @@ public class Main : MonoBehaviour
 
         GenerateLevel();
     }
-
+    // Update is called once per frame
+    void Update()
+    {
+        if (activatedCells.Count > 0)
+        {
+            while (activatedCells.Count > 0)
+            {
+                activatedCells.Dequeue().React();
+            }
+        }
+    }
     private void GenerateLevel()
     {
-        int size = 10;
+        int size = 5;
         cells = new Cell[size, size];
         for (int x = 0; x < size; ++x)
         {
