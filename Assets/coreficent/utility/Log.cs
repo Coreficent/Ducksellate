@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Log
 {
-    public static void Output(object input)
+    public static void Output(params object[] inputs)
     {
-        Debug.Log("Debug::" + input);
+        string output = "";
+        foreach (object input in inputs)
+        {
+            output += "::";
+            output += input;
+        }
+        Debug.Log("Debug::" + output);
     }
 
 }

@@ -30,7 +30,7 @@ public class Main : MonoBehaviour
     }
     private void GenerateLevel()
     {
-        int size = 5;
+        int size = 6;
         cells = new Cell[size, size];
         for (int x = 0; x < size; ++x)
         {
