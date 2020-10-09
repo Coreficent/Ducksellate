@@ -6,15 +6,16 @@ using UnityEngine.WSA;
 
 public class Cell : MonoBehaviour
 {
+    private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
     private readonly float rotationAngle = 90f;
-    private float targetAngle = 0f;
     private readonly float space = 1f;
+
+    private float targetAngle = 0f;
     private float direction = 1f;
     private bool activated = false;
-    //private readonly int[,] reactSites = { { -1, 0 }, { 0, -1 }, { 1, 0 }, { 0, 1 } };
     public int X { get; set; }
     public int Y { get; set; }
-    private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
+    
 
     void Start()
     {
@@ -39,21 +40,11 @@ public class Cell : MonoBehaviour
 
     private void ColllectReactableCells()
     {
-        /*
-        if (X < Main.cells.GetLength(0) - 1)
-        {
-            Main.activatedCells.Enqueue(Main.cells[X + 1, Y]);
-        }
-        if (Y < Main.cells.GetLength(1) - 1)
-        {
-            Main.activatedCells.Enqueue(Main.cells[X, Y + 1]);
-        }
-        */
         List<Cell> reactableCells = FindReactableCells();
 
-        Log.Output("capacity ", reactableCells.Count);
         foreach (Cell cell in reactableCells)
         {
+            cell.direction = direction;
             Main.activatedCells.Enqueue(cell);
         }
     }
@@ -64,14 +55,12 @@ public class Cell : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Log.Output("left clicked on::" + X + "::" + Y);
                 direction = 1f;
                 targetAngle = CalculateTargetAngle();
                 activated = true;
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                Log.Output("right clicked on::" + X + "::" + Y);
                 direction = -1f;
                 targetAngle = CalculateTargetAngle();
                 activated = true;
@@ -90,7 +79,6 @@ public class Cell : MonoBehaviour
         float target = transform.eulerAngles.z + rotationAngle * direction;
         target = target > 360f ? target - 360f : target;
         target = target < 0f ? target + 360f : target;
-        // Log.Output("target " + target);
 
         return target;
     }
@@ -105,24 +93,41 @@ public class Cell : MonoBehaviour
     {
         List<Cell> cells = new List<Cell>();
 
-        Cell current;
-
-        current = GetCell(reactSites[FindReactOffset(transform.eulerAngles.z)]);
-        Log.Output("current==null", current == null);
-        if (current)
+        foreach (Cell cell in FindCandidateCells(this))
         {
-            cells.Add(current);
-        }
-        current = GetCell(reactSites[FindReactOffset(transform.eulerAngles.z + 90f)]);
-        Log.Output("current==null", current == null);
-        if (current)
-        {
-            cells.Add(current);
+            if (CanReact(cell))
+            {
+                cells.Add(cell);
+            }
         }
 
         return cells;
     }
 
+    private List<Cell> FindCandidateCells(Cell originCell)
+    {
+        return new List<Cell>
+        {
+            GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z)]),
+            GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z + 90f)])
+        };
+    }
+
+    private bool CanReact(Cell candidate)
+    {
+        if (candidate)
+        {
+            foreach (Cell cell in FindCandidateCells(candidate))
+            {
+                if (cell == this)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
     private int FindReactOffset(float angle)
     {
         int offset = (int)Mathf.Round(angle / 90f);
@@ -131,13 +136,10 @@ public class Cell : MonoBehaviour
         return offset;
     }
 
-    private Cell GetCell(Tuple<int, int> coordinate)
+    private Cell GetCell(Cell originCell, Tuple<int, int> coordinate)
     {
-        Log.Output("coordinate", coordinate);
-        int x = X + coordinate.Item1;
-        int y = Y + coordinate.Item2;
-        Log.Output("coordinate x", x);
-        Log.Output("coordinate y", y);
+        int x = originCell.X + coordinate.Item1;
+        int y = originCell.Y + coordinate.Item2;
         if (x >= 0 && x < Main.cells.GetLength(0))
         {
             if (y >= 0 && y < Main.cells.GetLength(1))
@@ -147,10 +149,5 @@ public class Cell : MonoBehaviour
         }
 
         return null;
-    }
-
-    private bool CanReact(Cell pairCell)
-    {
-        return false;
     }
 }
