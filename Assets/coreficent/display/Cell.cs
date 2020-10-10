@@ -8,6 +8,7 @@ public class Cell : MonoBehaviour
 {
     private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
     private readonly float rotationAngle = 90f;
+    private readonly float boardAngle = 45f;
     private readonly float space = 1f;
 
     private float targetAngle = 0f;
@@ -15,11 +16,13 @@ public class Cell : MonoBehaviour
     private bool activated = false;
     public int X { get; set; }
     public int Y { get; set; }
-    
+
 
     void Start()
     {
-        transform.position = new Vector3(X * space - (Main.cells.GetLength(0) - 1) / 2f, Y * space - (Main.cells.GetLength(1) - 1) / 2f, 0f);
+        transform.position += new Vector3(X * space - (Main.cells.GetLength(0) - 1) / 2f, Y * space - (Main.cells.GetLength(1) - 1) / 2f, 0f);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
+        transform.RotateAround(transform.parent.position, Vector3.forward, boardAngle);
         CorrectAngle();
     }
 
@@ -35,17 +38,6 @@ public class Cell : MonoBehaviour
                 ColllectReactableCells();
                 activated = false;
             }
-        }
-    }
-
-    private void ColllectReactableCells()
-    {
-        List<Cell> reactableCells = FindReactableCells();
-
-        foreach (Cell cell in reactableCells)
-        {
-            cell.direction = direction;
-            Main.activatedCells.Enqueue(cell);
         }
     }
 
@@ -65,6 +57,17 @@ public class Cell : MonoBehaviour
                 targetAngle = CalculateTargetAngle();
                 activated = true;
             }
+        }
+    }
+
+    private void ColllectReactableCells()
+    {
+        List<Cell> reactableCells = FindReactableCells();
+
+        foreach (Cell cell in reactableCells)
+        {
+            cell.direction = direction;
+            Main.activatedCells.Enqueue(cell);
         }
     }
 
@@ -149,5 +152,10 @@ public class Cell : MonoBehaviour
         }
 
         return null;
+    }
+
+    public bool Tessellated()
+    {
+        return FindReactOffset(transform.eulerAngles.z) == 3;
     }
 }
