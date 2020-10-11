@@ -10,6 +10,12 @@ public class Cell : MonoBehaviour
     private readonly float rotationAngle = 90f;
     private readonly float boardAngle = 45f;
     private readonly float space = 1f;
+    private readonly Color colorDefault = new Color(1f, 1f, 1f, 1f);
+    private readonly Color colorHighlight = new Color(0.75f, 0.75f, 0.75f, 1f);
+    private readonly Color colorActivated = new Color(1.5f, 1f, 1f, 1f);
+
+
+    private SpriteRenderer spriteRenderer;
 
     private float targetAngle = 0f;
     private float direction = 1f;
@@ -17,9 +23,9 @@ public class Cell : MonoBehaviour
     public int X { get; set; }
     public int Y { get; set; }
 
-
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         transform.position += new Vector3(X * space - (Main.cells.GetLength(0) - 1) / 2f, Y * space - (Main.cells.GetLength(1) - 1) / 2f, 0f);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
         transform.RotateAround(transform.parent.position, Vector3.forward, boardAngle);
@@ -36,6 +42,7 @@ public class Cell : MonoBehaviour
             {
                 CorrectAngle();
                 ColllectReactableCells();
+                spriteRenderer.material.color = colorDefault;
                 activated = false;
             }
         }
@@ -43,21 +50,26 @@ public class Cell : MonoBehaviour
 
     void OnMouseOver()
     {
+        spriteRenderer.material.color = colorHighlight;
+
         if (!activated)
         {
             if (Input.GetMouseButtonDown(0))
             {
                 direction = 1f;
-                targetAngle = CalculateTargetAngle();
-                activated = true;
+                Activate();
             }
             else if (Input.GetMouseButtonDown(1))
             {
                 direction = -1f;
-                targetAngle = CalculateTargetAngle();
-                activated = true;
+                Activate();
             }
         }
+    }
+
+    private void OnMouseExit()
+    {
+        spriteRenderer.material.color = colorDefault;
     }
 
     private void ColllectReactableCells()
@@ -73,7 +85,13 @@ public class Cell : MonoBehaviour
 
     public void React()
     {
+        Activate();
+    }
+
+    private void Activate()
+    {
         targetAngle = CalculateTargetAngle();
+        spriteRenderer.material.color = colorActivated;
         activated = true;
     }
 
@@ -156,6 +174,6 @@ public class Cell : MonoBehaviour
 
     public bool Tessellated()
     {
-        return FindReactOffset(transform.eulerAngles.z) == 3;
+        return FindReactOffset(transform.eulerAngles.z) == 1;
     }
 }

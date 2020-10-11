@@ -53,7 +53,7 @@ public class Main : MonoBehaviour
         currentBoard.name = "Board";
         currentBoard.transform.position = new Vector3(-2f, 0, 0);
 
-        int size = 4;
+        int size = 5;
         cells = new Cell[size, size];
         for (int x = 0; x < size; ++x)
         {
