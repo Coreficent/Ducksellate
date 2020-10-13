@@ -17,9 +17,12 @@ public class Main : MonoBehaviour
     private enum State { WIN, RUN };
 
     private string sceneCurrent;
-    private const string MAIN = "Main";
+
     private const string TUTORIAL_ROTATE = "TutorialRotate";
     private const string TUTORIAL_REACT = "TutorialReact";
+    private const string EASY = "Easy";
+    private const string MEDIUM = "Medium";
+    private const string HARD = "Hard";
     private const string REPLAY = "Replay";
 
 
@@ -36,19 +39,15 @@ public class Main : MonoBehaviour
         {
             case State.WIN:
                 Debug.Log("won");
-                Button buttonCurrent = Instantiate(Button); ;
                 switch (sceneCurrent)
                 {
                     case TUTORIAL_ROTATE:
-                        buttonCurrent.scene = TUTORIAL_REACT;
                         DisableCells();
                         break;
                     case TUTORIAL_REACT:
-                        buttonCurrent.scene = MAIN;
                         DisableCells();
                         break;
-                    case MAIN:
-                        buttonCurrent.scene = REPLAY;
+                    case HARD:
                         DisableCells();
                         break;
                     default:
@@ -103,7 +102,7 @@ public class Main : MonoBehaviour
 
         switch (sceneCurrent)
         {
-            case (MAIN):
+            case (HARD):
                 int size = 13;
                 Cells = new Cell[size, size];
                 currentBoard.transform.position = new Vector3(-4f, 0f, 0f);

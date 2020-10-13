@@ -8,7 +8,7 @@ public class Button : MonoBehaviour
     public string scene;
     void OnMouseOver()
     {
-        Log.Output("Replay Over");
+        Log.Output("scene to load", scene);
         if (Input.GetMouseButtonDown(0))
         {
             if ("Exit".Equals(scene))
@@ -21,7 +21,6 @@ public class Button : MonoBehaviour
             }
             else
             {
-                Log.Output("Replay Scene Loaded");
                 SceneManager.LoadScene(scene);
             }
         }
