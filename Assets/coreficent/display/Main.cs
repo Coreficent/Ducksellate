@@ -95,6 +95,7 @@ public class Main : MonoBehaviour
                         Cell currentCell = Instantiate(cell, currentBoard.transform);
                         currentCell.X = x;
                         currentCell.Y = y;
+                        currentCell.Randomize();
                         cells[x, y] = currentCell;
                     }
                 }

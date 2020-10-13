@@ -25,12 +25,11 @@ public class Cell : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
 
         transform.position += new Vector3(X * space - (Main.cells.GetLength(0) - 1) / 2f, Y * space - (Main.cells.GetLength(1) - 1) / 2f, 0f);
         transform.RotateAround(transform.parent.position, Vector3.forward, boardAngle);
         transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);
-        
+
         CorrectAngle();
     }
 
@@ -84,7 +83,10 @@ public class Cell : MonoBehaviour
             Main.activatedCells.Enqueue(cell);
         }
     }
-
+    public void Randomize()
+    {
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
+    }
     public void React()
     {
         Activate();
