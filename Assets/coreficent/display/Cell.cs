@@ -25,9 +25,12 @@ public class Cell : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        transform.position += new Vector3(X * space - (Main.cells.GetLength(0) - 1) / 2f, Y * space - (Main.cells.GetLength(1) - 1) / 2f, 0f);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
+
+        transform.position += new Vector3(X * space - (Main.cells.GetLength(0) - 1) / 2f, Y * space - (Main.cells.GetLength(1) - 1) / 2f, 0f);
         transform.RotateAround(transform.parent.position, Vector3.forward, boardAngle);
+        transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);
+        
         CorrectAngle();
     }
 
@@ -37,7 +40,7 @@ public class Cell : MonoBehaviour
         if (activated)
         {
             transform.Rotate(Vector3.forward * direction, rotationAngle * Time.deltaTime);
-            if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 10f)
+            if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 5f)
             {
                 CorrectAngle();
                 ColllectReactableCells();
@@ -105,8 +108,8 @@ public class Cell : MonoBehaviour
 
     private void CorrectAngle()
     {
-        // prevents inaccuracy over many iterations
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Round(transform.eulerAngles.z / 90f) * 90f);
+        // prevents inaccuracy over many iterations due to floating point mathematics
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Round(transform.eulerAngles.z / rotationAngle) * rotationAngle);
     }
 
     private List<Cell> FindReactableCells()
