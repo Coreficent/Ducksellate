@@ -14,7 +14,7 @@ public class Main : MonoBehaviour
     public static Cell[,] Cells;
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
 
-    private enum State { WIN, RUN };
+    private enum State { WIN, RUN, IDLE };
 
     private string sceneCurrent;
 
@@ -24,6 +24,8 @@ public class Main : MonoBehaviour
     private const string MEDIUM = "Medium";
     private const string HARD = "Hard";
     private const string REPLAY = "Replay";
+
+    private bool nextLevelButtonShown = false;
 
 
     void Start()
@@ -38,21 +40,25 @@ public class Main : MonoBehaviour
         switch (GetState())
         {
             case State.WIN:
-                Debug.Log("won");
-                switch (sceneCurrent)
+                if (!nextLevelButtonShown)
                 {
-                    case TUTORIAL_ROTATE:
-                        DisableCells();
-                        break;
-                    case TUTORIAL_REACT:
-                        DisableCells();
-                        break;
-                    case HARD:
-                        DisableCells();
-                        break;
-                    default:
-                        Log.Output("unexpected scene");
-                        break;
+                    Instantiate(Button);
+                    switch (sceneCurrent)
+                    {
+                        case TUTORIAL_ROTATE:
+                            DisableCells();
+                            break;
+                        case TUTORIAL_REACT:
+                            DisableCells();
+                            break;
+                        case HARD:
+                            DisableCells();
+                            break;
+                        default:
+                            Log.Output("unexpected scene");
+                            break;
+                    }
+                    nextLevelButtonShown = true;
                 }
                 break;
             case State.RUN:
@@ -102,26 +108,6 @@ public class Main : MonoBehaviour
 
         switch (sceneCurrent)
         {
-            case (HARD):
-                int size = 13;
-                Cells = new Cell[size, size];
-                currentBoard.transform.position = new Vector3(-4f, 0f, 0f);
-                for (int x = 0; x < size; ++x)
-                {
-                    for (int y = 0; y < size; ++y)
-                    {
-                        if (x + y > 5 && x + y < 19 && y - x < 7)
-                        {
-                            Cell currentCell = Instantiate(Cell, currentBoard.transform);
-                            currentCell.X = x;
-                            currentCell.Y = y;
-                            currentCell.Randomize();
-                            Cells[x, y] = currentCell;
-                        }
-
-                    }
-                }
-                break;
             case (TUTORIAL_ROTATE):
                 Cells = new Cell[7, 7];
                 int rotateOffsetX = 1;
@@ -146,6 +132,42 @@ public class Main : MonoBehaviour
 
                 PopulateCell(currentBoard, 3, 3);
                 PopulateRock(currentBoard, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
+                break;
+            case (EASY):
+                Cells = new Cell[7, 7];
+                for (int i = 0; i < 7; ++i)
+                {
+                    Cell currentCell;
+                    currentCell = Instantiate(Cell, currentBoard.transform);
+                    currentCell.X = i;
+                    currentCell.Y = 0;
+                    Cells[i, 0] = currentCell;
+
+                    currentCell = Instantiate(Cell, currentBoard.transform);
+                    currentCell.X = 0;
+                    currentCell.Y = i;
+                    Cells[0, i] = currentCell;
+                }
+                break;
+            case (HARD):
+                int size = 13;
+                Cells = new Cell[size, size];
+                currentBoard.transform.position = new Vector3(-4f, 0f, 0f);
+                for (int x = 0; x < size; ++x)
+                {
+                    for (int y = 0; y < size; ++y)
+                    {
+                        if (x + y > 5 && x + y < 19 && y - x < 7)
+                        {
+                            Cell currentCell = Instantiate(Cell, currentBoard.transform);
+                            currentCell.X = x;
+                            currentCell.Y = y;
+                            currentCell.Randomize();
+                            Cells[x, y] = currentCell;
+                        }
+
+                    }
+                }
                 break;
             default:
                 Debug.Log("unexpected level");
