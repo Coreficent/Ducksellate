@@ -10,7 +10,7 @@ public class Cell : MonoBehaviour
     private readonly float boardAngle = 45f;
     private readonly float space = 1f;
     private readonly Color colorDefault = new Color(1f, 1f, 1f, 1f);
-    private readonly Color colorHighlight = new Color(0.75f, 0.75f, 0.75f, 1f);
+    private readonly Color colorHighlight = new Color(1f, 1.5f, 1f, 1f);
     private readonly Color colorActivated = new Color(1.5f, 1f, 1f, 1f);
 
 
@@ -51,10 +51,9 @@ public class Cell : MonoBehaviour
 
     void OnMouseOver()
     {
-        spriteRenderer.material.color = colorHighlight;
-
         if (!activated)
         {
+            spriteRenderer.material.color = colorHighlight;
             if (Input.GetMouseButtonDown(0))
             {
                 direction = 1f;
