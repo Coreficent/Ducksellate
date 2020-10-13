@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
     public static Cell[,] Cells;
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
 
-    private enum State { win, run };
+    private enum State { WIN, RUN };
 
     private string sceneCurrent;
     private const string MAIN = "Main";
@@ -30,7 +30,7 @@ public class Main : MonoBehaviour
     {
         switch (GetState())
         {
-            case State.win:
+            case State.WIN:
                 Debug.Log("won");
                 switch (sceneCurrent)
                 {
@@ -49,7 +49,7 @@ public class Main : MonoBehaviour
                 }
 
                 break;
-            case State.run:
+            case State.RUN:
                 while (CellsActivated.Count > 0)
                 {
                     CellsActivated.Dequeue().React();
@@ -69,11 +69,11 @@ public class Main : MonoBehaviour
             {
                 if (Cells[x, y] && !Cells[x, y].Tessellated())
                 {
-                    return State.run;
+                    return State.RUN;
                 }
             }
         }
-        return State.win;
+        return State.WIN;
     }
 
     private void GenerateLevel()
@@ -82,11 +82,12 @@ public class Main : MonoBehaviour
         currentBoard.name = "Board";
 
 
-        int size = 7;
-        Cells = new Cell[size, size];
+        
         switch (sceneCurrent)
         {
             case (MAIN):
+                int size = 7;
+                Cells = new Cell[size, size];
                 currentBoard.transform.position = new Vector3(-2f, 0f, 0f);
                 for (int x = 0; x < size; ++x)
                 {
@@ -101,6 +102,7 @@ public class Main : MonoBehaviour
                 }
                 break;
             case (TUTORIAL_ROTATE):
+                Cells = new Cell[7, 7];
                 currentBoard.transform.position = new Vector3(-4f, -1f, 0f);
                 PopulateCell(currentBoard, 0, 4);
                 PopulateCell(currentBoard, 1, 3);
@@ -109,6 +111,7 @@ public class Main : MonoBehaviour
                 PopulateCell(currentBoard, 4, 0);
                 break;
             case (TUTORIAL_REACT):
+                Cells = new Cell[7, 7];
                 currentBoard.transform.position = new Vector3(-1f, -3f, 0f);
                 PopulateCell(currentBoard, 1, 5);
                 PopulateCell(currentBoard, 1, 6);
