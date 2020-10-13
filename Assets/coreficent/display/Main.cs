@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
-    public Cell cell;
-    public GameObject board;
+    public Cell Cell;
+    public GameObject Board;
 
-    public static Cell[,] cells;
-    public static Queue<Cell> activatedCells = new Queue<Cell>();
+    public static Cell[,] Cells;
+    public static Queue<Cell> CellsActivated = new Queue<Cell>();
 
     private enum State { win, run };
 
@@ -50,9 +50,9 @@ public class Main : MonoBehaviour
 
                 break;
             case State.run:
-                while (activatedCells.Count > 0)
+                while (CellsActivated.Count > 0)
                 {
-                    activatedCells.Dequeue().React();
+                    CellsActivated.Dequeue().React();
                 }
                 break;
             default:
@@ -63,11 +63,11 @@ public class Main : MonoBehaviour
 
     private State GetState()
     {
-        for (int x = 0; x < cells.GetLength(0); ++x)
+        for (int x = 0; x < Cells.GetLength(0); ++x)
         {
-            for (int y = 0; y < cells.GetLength(1); ++y)
+            for (int y = 0; y < Cells.GetLength(1); ++y)
             {
-                if (cells[x, y] && !cells[x, y].Tessellated())
+                if (Cells[x, y] && !Cells[x, y].Tessellated())
                 {
                     return State.run;
                 }
@@ -78,12 +78,12 @@ public class Main : MonoBehaviour
 
     private void GenerateLevel()
     {
-        GameObject currentBoard = Instantiate(board);
+        GameObject currentBoard = Instantiate(Board);
         currentBoard.name = "Board";
 
 
         int size = 7;
-        cells = new Cell[size, size];
+        Cells = new Cell[size, size];
         switch (sceneCurrent)
         {
             case (MAIN):
@@ -92,11 +92,11 @@ public class Main : MonoBehaviour
                 {
                     for (int y = 0; y < size; ++y)
                     {
-                        Cell currentCell = Instantiate(cell, currentBoard.transform);
+                        Cell currentCell = Instantiate(Cell, currentBoard.transform);
                         currentCell.X = x;
                         currentCell.Y = y;
                         currentCell.Randomize();
-                        cells[x, y] = currentCell;
+                        Cells[x, y] = currentCell;
                     }
                 }
                 break;
@@ -126,9 +126,9 @@ public class Main : MonoBehaviour
     private void PopulateCell(GameObject currentBoard, int x, int y)
     {
         Cell cellRotate;
-        cellRotate = Instantiate(cell, currentBoard.transform);
+        cellRotate = Instantiate(Cell, currentBoard.transform);
         cellRotate.X = x;
         cellRotate.Y = y;
-        cells[x, y] = cellRotate;
+        Cells[x, y] = cellRotate;
     }
 }
