@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rock : Piece
+public class Obstacle : Piece
 {
     void Start()
     {

@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class Main : MonoBehaviour
 {
     public Cell Cell;
+    public Obstacle Obstacle;
     public GameObject Board;
 
     public static Cell[,] Cells;
@@ -82,7 +83,7 @@ public class Main : MonoBehaviour
         currentBoard.name = "Board";
 
 
-        
+
         switch (sceneCurrent)
         {
             case (MAIN):
@@ -102,13 +103,14 @@ public class Main : MonoBehaviour
                 }
                 break;
             case (TUTORIAL_ROTATE):
-                Cells = new Cell[7, 7];
-                currentBoard.transform.position = new Vector3(-4f, -1f, 0f);
+                Cells = new Cell[5, 5];
+                currentBoard.transform.position = new Vector3(-3.5f, -2f, 0f);
                 PopulateCell(currentBoard, 0, 4);
                 PopulateCell(currentBoard, 1, 3);
                 PopulateCell(currentBoard, 2, 2);
                 PopulateCell(currentBoard, 3, 1);
                 PopulateCell(currentBoard, 4, 0);
+                PopulateRock(currentBoard);
                 break;
             case (TUTORIAL_REACT):
                 Cells = new Cell[7, 7];
@@ -119,10 +121,27 @@ public class Main : MonoBehaviour
                 PopulateCell(currentBoard, 0, 6);
 
                 PopulateCell(currentBoard, 3, 3);
+                PopulateRock(currentBoard);
                 break;
             default:
                 Debug.Log("unexpected level");
                 break;
+        }
+    }
+
+    private void PopulateRock(GameObject board)
+    {
+        for (int x = 0; x < Cells.GetLength(0); ++x)
+        {
+            for (int y = 0; y < Cells.GetLength(1); ++y)
+            {
+                if (!Cells[x, y])
+                {
+                    Obstacle currentCell = Instantiate(Obstacle, board.transform);
+                    currentCell.X = x;
+                    currentCell.Y = y;
+                }
+            }
         }
     }
 

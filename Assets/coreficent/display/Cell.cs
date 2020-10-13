@@ -8,8 +8,7 @@ public class Cell : Piece
     public SpriteRenderer SpriteRenderer;
 
     private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
-    private readonly float rotationAngle = 90f;
-    private readonly float boardAngle = 45f;
+
     private readonly Color colorDefault = new Color(1f, 1f, 1f, 1f);
     private readonly Color colorHighlight = new Color(1f, 1.5f, 1f, 1f);
     private readonly Color colorActivated = new Color(1.5f, 1f, 1f, 1f);
@@ -21,7 +20,6 @@ public class Cell : Piece
     void Start()
     {
         Reposition();
-        transform.RotateAround(transform.parent.position, Vector3.forward, boardAngle);
         transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);
 
         CorrectAngle();
