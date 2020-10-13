@@ -7,6 +7,8 @@ public class Cell : Piece
 {
     public SpriteRenderer SpriteRenderer;
 
+    public bool Disabled { get; set; }
+
     private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
 
     private readonly Color colorDefault = new Color(1f, 1f, 1f, 1f);
@@ -43,18 +45,21 @@ public class Cell : Piece
 
     void OnMouseOver()
     {
-        if (!activated)
+        if (!Disabled)
         {
-            SpriteRenderer.material.color = colorHighlight;
-            if (Input.GetMouseButtonDown(0))
+            if (!activated)
             {
-                direction = 1f;
-                Activate();
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                direction = -1f;
-                Activate();
+                SpriteRenderer.material.color = colorHighlight;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    direction = 1f;
+                    Activate();
+                }
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    direction = -1f;
+                    Activate();
+                }
             }
         }
     }

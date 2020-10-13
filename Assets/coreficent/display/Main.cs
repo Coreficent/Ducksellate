@@ -9,6 +9,7 @@ public class Main : MonoBehaviour
     public Cell Cell;
     public Obstacle Obstacle;
     public GameObject Board;
+    public Button Button;
 
     public static Cell[,] Cells;
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
@@ -19,6 +20,8 @@ public class Main : MonoBehaviour
     private const string MAIN = "Main";
     private const string TUTORIAL_ROTATE = "TutorialRotate";
     private const string TUTORIAL_REACT = "TutorialReact";
+    private const string REPLAY = "Replay";
+
 
     void Start()
     {
@@ -33,22 +36,25 @@ public class Main : MonoBehaviour
         {
             case State.WIN:
                 Debug.Log("won");
+                Button buttonCurrent = Instantiate(Button); ;
                 switch (sceneCurrent)
                 {
                     case TUTORIAL_ROTATE:
-                        SceneManager.LoadScene(TUTORIAL_REACT);
+                        buttonCurrent.scene = TUTORIAL_REACT;
+                        DisableCells();
                         break;
                     case TUTORIAL_REACT:
-                        SceneManager.LoadScene(MAIN);
+                        buttonCurrent.scene = MAIN;
+                        DisableCells();
                         break;
                     case MAIN:
-                        SceneManager.LoadScene("Replay");
+                        buttonCurrent.scene = REPLAY;
+                        DisableCells();
                         break;
                     default:
                         Log.Output("unexpected scene");
                         break;
                 }
-
                 break;
             case State.RUN:
                 while (CellsActivated.Count > 0)
@@ -62,6 +68,19 @@ public class Main : MonoBehaviour
         }
     }
 
+    private void DisableCells()
+    {
+        for (int x = 0; x < Cells.GetLength(0); ++x)
+        {
+            for (int y = 0; y < Cells.GetLength(1); ++y)
+            {
+                if (Cells[x, y])
+                {
+                    Cells[x, y].Disabled = true;
+                }
+            }
+        }
+    }
     private State GetState()
     {
         for (int x = 0; x < Cells.GetLength(0); ++x)
@@ -81,8 +100,6 @@ public class Main : MonoBehaviour
     {
         GameObject currentBoard = Instantiate(Board);
         currentBoard.name = "Board";
-
-
 
         switch (sceneCurrent)
         {
