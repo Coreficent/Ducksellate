@@ -138,7 +138,7 @@ public class Main : MonoBehaviour
                     PopulateCell(board, i, 0);
                 }
                 PopulateCell(board, 6, 0).RotateLeft();
-                PopulateObstacle(board, (x, y) => true);
+                PopulateObstacle(board, (x, y) => x - y > -1);
                 break;
             case (MEDIUM):
                 Cells = new Cell[7, 7];
