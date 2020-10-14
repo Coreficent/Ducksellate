@@ -43,21 +43,7 @@ public class Main : MonoBehaviour
                 if (!nextLevelButtonShown)
                 {
                     Instantiate(Button);
-                    switch (sceneCurrent)
-                    {
-                        case TUTORIAL_ROTATE:
-                            DisableCells();
-                            break;
-                        case TUTORIAL_REACT:
-                            DisableCells();
-                            break;
-                        case HARD:
-                            DisableCells();
-                            break;
-                        default:
-                            Log.Output("unexpected scene");
-                            break;
-                    }
+                    DisableCells();
                     nextLevelButtonShown = true;
                 }
                 break;
@@ -103,8 +89,8 @@ public class Main : MonoBehaviour
 
     private void GenerateLevel()
     {
-        GameObject currentBoard = Instantiate(Board);
-        currentBoard.name = "Board";
+        GameObject board = Instantiate(Board);
+        board.name = "Board";
 
         switch (sceneCurrent)
         {
@@ -112,54 +98,69 @@ public class Main : MonoBehaviour
                 Cells = new Cell[7, 7];
                 int rotateOffsetX = 1;
                 int rotateOffsetY = rotateOffsetX;
-                currentBoard.transform.position = new Vector3(-3.5f, -2f, 0f);
-                PopulateCell(currentBoard, 0 + rotateOffsetX, 4 + rotateOffsetY);
-                PopulateCell(currentBoard, 1 + rotateOffsetX, 3 + rotateOffsetY);
-                PopulateCell(currentBoard, 2 + rotateOffsetX, 2 + rotateOffsetY);
-                PopulateCell(currentBoard, 3 + rotateOffsetX, 1 + rotateOffsetY);
-                PopulateCell(currentBoard, 4 + rotateOffsetX, 0 + rotateOffsetY);
-                PopulateRock(currentBoard, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
+                board.transform.position = new Vector3(-3.5f, -2f, 0f);
+                PopulateCell(board, 0 + rotateOffsetX, 4 + rotateOffsetY);
+                PopulateCell(board, 1 + rotateOffsetX, 3 + rotateOffsetY);
+                PopulateCell(board, 2 + rotateOffsetX, 2 + rotateOffsetY);
+                PopulateCell(board, 3 + rotateOffsetX, 1 + rotateOffsetY);
+                PopulateCell(board, 4 + rotateOffsetX, 0 + rotateOffsetY);
+                PopulateRock(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
                 break;
             case (TUTORIAL_REACT):
                 Cells = new Cell[7, 7];
                 int ox = 1;
                 int oy = -1;
-                currentBoard.transform.position = new Vector3(-1f, -3f, 0f);
-                PopulateCell(currentBoard, 1 + ox, 5 + oy);
-                PopulateCell(currentBoard, 1 + ox, 6 + oy);
-                PopulateCell(currentBoard, 0 + ox, 5 + oy);
-                PopulateCell(currentBoard, 0 + ox, 6 + oy);
+                board.transform.position = new Vector3(-1f, -3f, 0f);
+                PopulateCell(board, 1 + ox, 5 + oy);
+                PopulateCell(board, 1 + ox, 6 + oy);
+                PopulateCell(board, 0 + ox, 5 + oy);
+                PopulateCell(board, 0 + ox, 6 + oy);
 
-                PopulateCell(currentBoard, 3, 3);
-                PopulateRock(currentBoard, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
+                PopulateCell(board, 3, 3);
+                PopulateRock(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
                 break;
             case (EASY):
                 Cells = new Cell[7, 7];
-                for (int i = 0; i < 7; ++i)
+                board.transform.position = new Vector3(-4f, 0f, 0f);
+                for (int i = 0; i < 6; ++i)
                 {
-                    Cell currentCell;
-                    currentCell = Instantiate(Cell, currentBoard.transform);
-                    currentCell.X = i;
-                    currentCell.Y = 0;
-                    Cells[i, 0] = currentCell;
-
-                    currentCell = Instantiate(Cell, currentBoard.transform);
-                    currentCell.X = 0;
-                    currentCell.Y = i;
-                    Cells[0, i] = currentCell;
+                    PopulateCell(board, 6, i + 1);
+                    PopulateCell(board, i, 0);
                 }
+                PopulateCell(board, 6, 0);
+                PopulateRock(board, (x, y) => true);
+                break;
+            case (MEDIUM):
+                Cells = new Cell[7, 7];
+                board.transform.position = new Vector3(-4f, 0f, 0f);
+                for (int i = 0; i < 6; ++i)
+                {
+                    PopulateCell(board, 0, i + 1);
+                    PopulateCell(board, 6, i);
+                    PopulateCell(board, i, 0);
+                    PopulateCell(board, i + 1, 6);
+                }
+                int offsetInner = 2;
+                for (int i = 0; i < 2; ++i)
+                {
+                    PopulateCell(board, 0 + offsetInner, i + 1 + offsetInner);
+                    PopulateCell(board, 2 + offsetInner, i + offsetInner);
+                    PopulateCell(board, i + offsetInner, 0 + offsetInner);
+                    PopulateCell(board, i + offsetInner + 1, 2 + offsetInner);
+                }
+                PopulateRock(board, (x, y) => true);
                 break;
             case (HARD):
                 int size = 13;
                 Cells = new Cell[size, size];
-                currentBoard.transform.position = new Vector3(-4f, 0f, 0f);
+                board.transform.position = new Vector3(-4f, 0f, 0f);
                 for (int x = 0; x < size; ++x)
                 {
                     for (int y = 0; y < size; ++y)
                     {
                         if (x + y > 5 && x + y < 19 && y - x < 7)
                         {
-                            Cell currentCell = Instantiate(Cell, currentBoard.transform);
+                            Cell currentCell = Instantiate(Cell, board.transform);
                             currentCell.X = x;
                             currentCell.Y = y;
                             currentCell.Randomize();
@@ -174,7 +175,22 @@ public class Main : MonoBehaviour
                 break;
         }
     }
-
+    private void PopulateCell(GameObject currentBoard, int x, int y)
+    {
+        if (!Cells[x, y])
+        {
+            Cell cell;
+            cell = Instantiate(Cell, currentBoard.transform);
+            cell.name = x + ":" + y;
+            cell.X = x;
+            cell.Y = y;
+            Cells[x, y] = cell;
+        }
+        else
+        {
+            Log.Output("cell already populated at", x, y);
+        }
+    }
     private void PopulateRock(GameObject board, Func<int, int, bool> condition)
     {
         for (int x = 0; x < Cells.GetLength(0); ++x)
@@ -192,14 +208,5 @@ public class Main : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void PopulateCell(GameObject currentBoard, int x, int y)
-    {
-        Cell cellRotate;
-        cellRotate = Instantiate(Cell, currentBoard.transform);
-        cellRotate.X = x;
-        cellRotate.Y = y;
-        Cells[x, y] = cellRotate;
     }
 }
