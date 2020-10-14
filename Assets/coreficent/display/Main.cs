@@ -27,7 +27,6 @@ public class Main : MonoBehaviour
 
     private bool nextLevelButtonShown = false;
 
-
     void Start()
     {
         sceneCurrent = SceneManager.GetActiveScene().name;

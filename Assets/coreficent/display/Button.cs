@@ -15,7 +15,7 @@ public class Button : MonoBehaviour
             {
                 Application.Quit();
             }
-            else if ("Next".Equals(scene))
+            else if ("Next".Equals(scene) || "Skip".Equals(scene))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
