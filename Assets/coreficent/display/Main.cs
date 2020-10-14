@@ -101,7 +101,7 @@ public class Main : MonoBehaviour
                 Cells = new Cell[7, 7];
                 int rotateOffsetX = 1;
                 int rotateOffsetY = rotateOffsetX;
-                board.transform.position = new Vector3(-3.5f, -2f, 0f);
+                board.transform.position = new Vector3(-2f, 0f, 0f);
                 PopulateCell(board, 0 + rotateOffsetX, 4 + rotateOffsetY).RotateLeft();
                 PopulateCell(board, 1 + rotateOffsetX, 3 + rotateOffsetY).RotateRight().RotateRight();
                 PopulateCell(board, 2 + rotateOffsetX, 2 + rotateOffsetY).RotateLeft();
@@ -120,7 +120,7 @@ public class Main : MonoBehaviour
                 Cells = new Cell[7, 7];
                 int ox = 1;
                 int oy = -1;
-                board.transform.position = new Vector3(-1f, -3f, 0f);
+                board.transform.position = new Vector3(-1f, 0f, 0f);
                 PopulateCell(board, 1 + ox, 5 + oy).RotateRight();
                 PopulateCell(board, 1 + ox, 6 + oy);
                 PopulateCell(board, 0 + ox, 5 + oy).RotateRight().RotateRight();
