@@ -6,7 +6,7 @@ using UnityEngine;
 public class Cell : Piece
 {
     public SpriteRenderer SpriteRenderer;
-
+    public AudioSource AudioSource;
     public bool Disabled { get; set; }
 
     private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
@@ -92,6 +92,7 @@ public class Cell : Piece
     {
         targetAngle = CalculateTargetAngle();
         SpriteRenderer.material.color = colorActivated;
+        AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f));
         activated = true;
     }
 

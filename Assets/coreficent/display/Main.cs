@@ -139,19 +139,21 @@ public class Main : MonoBehaviour
                 board.transform.position = new Vector3(-4f, 0f, 0f);
                 for (int i = 0; i < 6; ++i)
                 {
-                    PopulateCell(board, 0, i + 1);
-                    PopulateCell(board, 6, i);
-                    PopulateCell(board, i, 0);
-                    PopulateCell(board, i + 1, 6);
+                    PopulateCell(board, 0, i + 1).Randomize();
+                    PopulateCell(board, 6, i).Randomize();
+                    PopulateCell(board, i, 0).Randomize();
+                    PopulateCell(board, i + 1, 6).Randomize();
                 }
                 int offsetInner = 2;
                 for (int i = 0; i < 2; ++i)
                 {
-                    PopulateCell(board, 0 + offsetInner, i + 1 + offsetInner);
-                    PopulateCell(board, 2 + offsetInner, i + offsetInner);
-                    PopulateCell(board, i + offsetInner, 0 + offsetInner);
-                    PopulateCell(board, i + offsetInner + 1, 2 + offsetInner);
+                    PopulateCell(board, 0 + offsetInner, i + 1 + offsetInner).Randomize();
+                    PopulateCell(board, 2 + offsetInner, i + offsetInner).Randomize();
+                    PopulateCell(board, i + offsetInner, 0 + offsetInner).Randomize();
+                    PopulateCell(board, i + offsetInner + 1, 2 + offsetInner).Randomize();
                 }
+                PopulateCell(board, 3, 3).Randomize();
+
                 PopulateRock(board, (x, y) => true);
                 break;
             case (HARD):
@@ -179,12 +181,12 @@ public class Main : MonoBehaviour
                 break;
         }
     }
-    private void PopulateCell(GameObject currentBoard, int x, int y)
+    private Cell PopulateCell(GameObject currentBoard, int x, int y)
     {
+        Cell cell = null;
+        cell = Instantiate(Cell, currentBoard.transform);
         if (!Cells[x, y])
         {
-            Cell cell;
-            cell = Instantiate(Cell, currentBoard.transform);
             cell.name = x + ":" + y;
             cell.X = x;
             cell.Y = y;
@@ -192,8 +194,10 @@ public class Main : MonoBehaviour
         }
         else
         {
+            cell.X = cell.Y = -1024;
             Log.Output("cell already populated at", x, y);
         }
+        return cell;
     }
     private void PopulateRock(GameObject board, Func<int, int, bool> condition)
     {
