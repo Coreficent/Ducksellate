@@ -40,7 +40,11 @@ public class Main : MonoBehaviour
         switch (GetState())
         {
             case State.WIN:
-                if (!nextLevelButtonShown)
+                if (HARD.Equals(sceneCurrent))
+                {
+                    SceneManager.LoadScene(REPLAY);
+                }
+                else if (!nextLevelButtonShown)
                 {
                     Instantiate(Button);
                     DisableCells();
