@@ -11,7 +11,7 @@ public class Main : MonoBehaviour
     public GameObject Board;
     public Button Button;
 
-    public static Cell[,] Cells;
+    public static Cell[,] Cells = new Cell[1, 1];
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
 
     private enum State { WIN, RUN, IDLE };
@@ -115,7 +115,7 @@ public class Main : MonoBehaviour
                     PopulateCell(board, 1, 5);
                 }
 
-                PopulateRock(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
+                PopulateObstacle(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
                 break;
             case (TUTORIAL_REACT):
                 Cells = new Cell[7, 7];
@@ -128,7 +128,7 @@ public class Main : MonoBehaviour
                 PopulateCell(board, 0 + ox, 6 + oy).RotateLeft();
 
                 PopulateCell(board, 3, 3);
-                PopulateRock(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
+                PopulateObstacle(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
                 break;
             case (EASY):
                 Cells = new Cell[7, 7];
@@ -139,7 +139,7 @@ public class Main : MonoBehaviour
                     PopulateCell(board, i, 0);
                 }
                 PopulateCell(board, 6, 0).RotateLeft();
-                PopulateRock(board, (x, y) => true);
+                PopulateObstacle(board, (x, y) => true);
                 break;
             case (MEDIUM):
                 Cells = new Cell[7, 7];
@@ -161,7 +161,7 @@ public class Main : MonoBehaviour
                 }
                 PopulateCell(board, 3, 3).Randomize();
 
-                PopulateRock(board, (x, y) => true);
+                PopulateObstacle(board, (x, y) => true);
                 break;
             case (HARD):
                 int size = 13;
@@ -206,7 +206,7 @@ public class Main : MonoBehaviour
         }
         return cell;
     }
-    private void PopulateRock(GameObject board, Func<int, int, bool> condition)
+    private void PopulateObstacle(GameObject board, Func<int, int, bool> condition)
     {
         for (int x = 0; x < Cells.GetLength(0); ++x)
         {
