@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Log
 {
+    public static bool DEBUG = false;
     public static void Output(params object[] inputs)
     {
         string output = "";

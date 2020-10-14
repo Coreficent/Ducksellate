@@ -103,11 +103,18 @@ public class Main : MonoBehaviour
                 int rotateOffsetX = 1;
                 int rotateOffsetY = rotateOffsetX;
                 board.transform.position = new Vector3(-3.5f, -2f, 0f);
-                PopulateCell(board, 0 + rotateOffsetX, 4 + rotateOffsetY);
-                PopulateCell(board, 1 + rotateOffsetX, 3 + rotateOffsetY);
-                PopulateCell(board, 2 + rotateOffsetX, 2 + rotateOffsetY);
+                PopulateCell(board, 0 + rotateOffsetX, 4 + rotateOffsetY).RotateLeft();
+                PopulateCell(board, 1 + rotateOffsetX, 3 + rotateOffsetY).RotateRight().RotateRight();
+                PopulateCell(board, 2 + rotateOffsetX, 2 + rotateOffsetY).RotateLeft();
                 PopulateCell(board, 3 + rotateOffsetX, 1 + rotateOffsetY);
-                PopulateCell(board, 4 + rotateOffsetX, 0 + rotateOffsetY);
+                PopulateCell(board, 4 + rotateOffsetX, 0 + rotateOffsetY).RotateLeft();
+
+                if (Log.DEBUG)
+                {
+                    PopulateCell(board, 1, 5);
+                    PopulateCell(board, 1, 5);
+                }
+
                 PopulateRock(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
                 break;
             case (TUTORIAL_REACT):
@@ -115,10 +122,10 @@ public class Main : MonoBehaviour
                 int ox = 1;
                 int oy = -1;
                 board.transform.position = new Vector3(-1f, -3f, 0f);
-                PopulateCell(board, 1 + ox, 5 + oy);
+                PopulateCell(board, 1 + ox, 5 + oy).RotateRight();
                 PopulateCell(board, 1 + ox, 6 + oy);
-                PopulateCell(board, 0 + ox, 5 + oy);
-                PopulateCell(board, 0 + ox, 6 + oy);
+                PopulateCell(board, 0 + ox, 5 + oy).RotateRight().RotateRight();
+                PopulateCell(board, 0 + ox, 6 + oy).RotateLeft();
 
                 PopulateCell(board, 3, 3);
                 PopulateRock(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
@@ -128,10 +135,10 @@ public class Main : MonoBehaviour
                 board.transform.position = new Vector3(-4f, 0f, 0f);
                 for (int i = 0; i < 6; ++i)
                 {
-                    PopulateCell(board, 6, i + 1);
+                    PopulateCell(board, 6, i + 1).RotateRight().RotateRight();
                     PopulateCell(board, i, 0);
                 }
-                PopulateCell(board, 6, 0);
+                PopulateCell(board, 6, 0).RotateLeft();
                 PopulateRock(board, (x, y) => true);
                 break;
             case (MEDIUM):
@@ -183,11 +190,10 @@ public class Main : MonoBehaviour
     }
     private Cell PopulateCell(GameObject currentBoard, int x, int y)
     {
-        Cell cell = null;
-        cell = Instantiate(Cell, currentBoard.transform);
+        Cell cell = Instantiate(Cell, currentBoard.transform);
         if (!Cells[x, y])
         {
-            cell.name = x + ":" + y;
+            cell.name = "cell:" + x + ":" + y;
             cell.X = x;
             cell.Y = y;
             Cells[x, y] = cell;
@@ -195,6 +201,7 @@ public class Main : MonoBehaviour
         else
         {
             cell.X = cell.Y = -1024;
+            cell.name = "degenerate cell:" + x + ":" + y;
             Log.Output("cell already populated at", x, y);
         }
         return cell;

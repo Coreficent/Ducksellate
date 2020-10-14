@@ -83,6 +83,17 @@ public class Cell : Piece
     {
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
     }
+    public Cell RotateLeft()
+    {
+        transform.eulerAngles += new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, rotationAngle);
+        return this;
+    }
+    public Cell RotateRight()
+    {
+        transform.eulerAngles += new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -rotationAngle);
+        return this;
+    }
+
     public void React()
     {
         Activate();
@@ -175,6 +186,6 @@ public class Cell : Piece
 
     public bool Tessellated()
     {
-        return FindReactOffset(transform.eulerAngles.z) == 1;
+        return FindReactOffset(transform.eulerAngles.z) == 1 || (X == -1024 && Y == -1024);
     }
 }
