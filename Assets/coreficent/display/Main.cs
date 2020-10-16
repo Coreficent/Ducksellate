@@ -9,21 +9,18 @@ public class Main : MonoBehaviour
     public Cell Cell;
     public Obstacle Obstacle;
     public GameObject Board;
-    public Button Button;
+    public Button ButtonNext;
+    public Button ButtonSkip;
 
     public static Cell[,] Cells = new Cell[1, 1];
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
 
+    private static bool gameBeat = false;
     private enum State { WIN, RUN, IDLE };
 
     private string sceneCurrent;
 
-    private const string TUTORIAL_ROTATE = "TutorialRotate";
-    private const string TUTORIAL_REACT = "TutorialReact";
-    private const string EASY = "Easy";
-    private const string MEDIUM = "Medium";
-    private const string HARD = "Hard";
-    private const string REPLAY = "Replay";
+
 
     private bool nextLevelButtonShown = false;
 
@@ -31,6 +28,10 @@ public class Main : MonoBehaviour
     {
         sceneCurrent = SceneManager.GetActiveScene().name;
         GenerateLevel();
+        if (!SceneType.HARD.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
+        {
+            Instantiate(ButtonSkip);
+        }
         Log.Output("main initialized: ", sceneCurrent);
     }
 
@@ -39,13 +40,14 @@ public class Main : MonoBehaviour
         switch (GetState())
         {
             case State.WIN:
-                if (HARD.Equals(sceneCurrent))
+                if (SceneType.HARD.Equals(sceneCurrent))
                 {
-                    SceneManager.LoadScene(REPLAY);
+                    gameBeat = true;
+                    SceneManager.LoadScene(SceneType.REPLAY);
                 }
                 else if (!nextLevelButtonShown)
                 {
-                    Instantiate(Button);
+                    Instantiate(ButtonNext);
                     DisableCells();
                     nextLevelButtonShown = true;
                 }
@@ -97,7 +99,7 @@ public class Main : MonoBehaviour
 
         switch (sceneCurrent)
         {
-            case (TUTORIAL_ROTATE):
+            case (SceneType.TUTORIAL_ROTATE):
                 Cells = new Cell[7, 7];
                 int rotateOffsetX = 1;
                 int rotateOffsetY = rotateOffsetX;
@@ -116,7 +118,7 @@ public class Main : MonoBehaviour
 
                 PopulateObstacle(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
                 break;
-            case (TUTORIAL_REACT):
+            case (SceneType.TUTORIAL_REACT):
                 Cells = new Cell[7, 7];
                 int ox = 1;
                 int oy = -1;
@@ -129,7 +131,7 @@ public class Main : MonoBehaviour
                 PopulateCell(board, 3, 3);
                 PopulateObstacle(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
                 break;
-            case (EASY):
+            case (SceneType.EASY):
                 Cells = new Cell[7, 7];
                 board.transform.position = new Vector3(-4f, 0f, 0f);
                 for (int i = 0; i < 6; ++i)
@@ -140,7 +142,7 @@ public class Main : MonoBehaviour
                 PopulateCell(board, 6, 0).RotateLeft();
                 PopulateObstacle(board, (x, y) => x - y > -1);
                 break;
-            case (MEDIUM):
+            case (SceneType.MEDIUM):
                 Cells = new Cell[7, 7];
                 board.transform.position = new Vector3(-4f, 0f, 0f);
                 for (int i = 0; i < 6; ++i)
@@ -162,7 +164,7 @@ public class Main : MonoBehaviour
 
                 PopulateObstacle(board, (x, y) => true);
                 break;
-            case (HARD):
+            case (SceneType.HARD):
                 int size = 13;
                 Cells = new Cell[size, size];
                 board.transform.position = new Vector3(-4f, 0f, 0f);

@@ -26,8 +26,6 @@ public class Cell : Piece
 
         CorrectAngle();
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (activated)
