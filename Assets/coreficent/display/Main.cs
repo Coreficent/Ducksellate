@@ -11,6 +11,7 @@ public class Main : MonoBehaviour
     public GameObject Board;
     public Button ButtonNext;
     public Button ButtonSkip;
+    public Button ButtonCredits;
 
     public static Cell[,] Cells = new Cell[0, 0];
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
@@ -20,10 +21,6 @@ public class Main : MonoBehaviour
 
     private string sceneCurrent;
 
-
-
-    private bool nextLevelButtonShown = false;
-
     void Start()
     {
         sceneCurrent = SceneManager.GetActiveScene().name;
@@ -31,6 +28,10 @@ public class Main : MonoBehaviour
         if (!SceneType.HARD.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
         {
             Instantiate(ButtonSkip);
+        }
+        if (gameBeat && SceneType.MENU.Equals(sceneCurrent))
+        {
+            Instantiate(ButtonCredits);
         }
         Log.Output("main initialized: ", sceneCurrent);
     }
@@ -45,11 +46,10 @@ public class Main : MonoBehaviour
                     gameBeat = true;
                     SceneManager.LoadScene(SceneType.REPLAY);
                 }
-                else if (!nextLevelButtonShown)
+                else
                 {
                     Instantiate(ButtonNext);
                     DisableCells();
-                    nextLevelButtonShown = true;
                 }
                 break;
             case State.RUN:
@@ -78,6 +78,7 @@ public class Main : MonoBehaviour
                 }
             }
         }
+        enabled = false;
     }
     private State GetState()
     {

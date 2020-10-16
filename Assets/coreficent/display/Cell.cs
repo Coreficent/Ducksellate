@@ -23,7 +23,6 @@ public class Cell : Piece
     {
         Reposition();
         transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);
-
         CorrectAngle();
     }
     void Update()
