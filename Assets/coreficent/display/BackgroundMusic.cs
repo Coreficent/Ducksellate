@@ -7,19 +7,12 @@ public class BackgroundMusic : MonoBehaviour
     public AudioSource FluffingADuck;
 
     private static BackgroundMusic backgroundMusic = null;
-    private string sceneCurrent;
 
     void Start()
     {
-        sceneCurrent = SceneManager.GetActiveScene().name;
-        if (SceneType.CREDIT.Equals(sceneCurrent))
-        {
-            CCCP.Play();
-        }
-        else
-        {
-            FluffingADuck.Play();
-        }
+        PlayTrack(SceneManager.GetActiveScene());
+        SceneManager.activeSceneChanged += UpdateMusic;
+        FluffingADuck.Play();
     }
 
     private void Awake()
@@ -37,9 +30,15 @@ public class BackgroundMusic : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void Update()
+    private void UpdateMusic(Scene current, Scene next)
     {
-        if (SceneType.CREDIT.Equals(sceneCurrent))
+        Log.Output("scene ", current.name, next.name);
+        PlayTrack(next);
+    }
+
+    private void PlayTrack(Scene scene)
+    {
+        if (SceneType.CREDITS.Equals(scene.name))
         {
             if (FluffingADuck.isPlaying)
             {

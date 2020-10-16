@@ -33,10 +33,7 @@ public class Cell : Piece
             transform.Rotate(Vector3.forward * direction, rotationAngle * Time.deltaTime);
             if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 5f)
             {
-                CorrectAngle();
-                ColllectReactableCells();
-                SpriteRenderer.material.color = colorDefault;
-                activated = false;
+                Deactivate();
             }
         }
     }
@@ -103,6 +100,14 @@ public class Cell : Piece
         SpriteRenderer.material.color = colorActivated;
         AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f));
         activated = true;
+    }
+
+    private void Deactivate()
+    {
+        CorrectAngle();
+        ColllectReactableCells();
+        SpriteRenderer.material.color = colorDefault;
+        activated = false;
     }
 
     private float CalculateTargetAngle()

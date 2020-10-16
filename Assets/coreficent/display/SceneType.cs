@@ -6,5 +6,6 @@
     public const string MEDIUM = "Medium";
     public const string HARD = "Hard";
     public const string REPLAY = "Replay";
-    public const string CREDIT = "Credit";
+    public const string CREDITS = "Credits";
+    public const string MENU = "Menu";
 }

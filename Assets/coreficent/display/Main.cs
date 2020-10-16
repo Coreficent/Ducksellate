@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
     public Button ButtonNext;
     public Button ButtonSkip;
 
-    public static Cell[,] Cells = new Cell[1, 1];
+    public static Cell[,] Cells = new Cell[0, 0];
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
 
     private static bool gameBeat = false;
@@ -58,6 +58,8 @@ public class Main : MonoBehaviour
                     CellsActivated.Dequeue().React();
                 }
                 break;
+            case State.IDLE:
+                break;
             default:
                 Debug.Log("unexpected state");
                 break;
@@ -79,6 +81,11 @@ public class Main : MonoBehaviour
     }
     private State GetState()
     {
+        if (Cells.GetLength(0) == 0 && Cells.GetLength(1) == 0)
+        {
+            return State.IDLE;
+        }
+
         for (int x = 0; x < Cells.GetLength(0); ++x)
         {
             for (int y = 0; y < Cells.GetLength(1); ++y)
@@ -89,6 +96,8 @@ public class Main : MonoBehaviour
                 }
             }
         }
+
+
         return State.WIN;
     }
 
@@ -183,6 +192,12 @@ public class Main : MonoBehaviour
 
                     }
                 }
+                break;
+            case (SceneType.CREDITS):
+                Cells = new Cell[0, 0];
+                break;
+            case (SceneType.MENU):
+                Cells = new Cell[0, 0];
                 break;
             default:
                 Debug.Log("unexpected level");
