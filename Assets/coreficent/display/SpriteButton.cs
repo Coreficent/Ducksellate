@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Button : MonoBehaviour
+public class SpriteButton : MonoBehaviour
 {
     public string scene;
     void OnMouseOver()

@@ -9,9 +9,9 @@ public class Main : MonoBehaviour
     public Cell Cell;
     public Obstacle Obstacle;
     public GameObject Board;
-    public Button ButtonNext;
-    public Button ButtonSkip;
-    public Button ButtonCredits;
+    public SpriteButton ButtonNext;
+    public SpriteButton ButtonSkip;
+    public SpriteButton ButtonCredits;
 
     public static Cell[,] Cells = new Cell[0, 0];
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
@@ -25,7 +25,7 @@ public class Main : MonoBehaviour
     {
         sceneCurrent = SceneManager.GetActiveScene().name;
         GenerateLevel();
-        if (!SceneType.HARD.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
+        if (!SceneType.HARD.Equals(sceneCurrent) && !SceneType.MENU.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
         {
             Instantiate(ButtonSkip);
         }
