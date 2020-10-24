@@ -13,6 +13,7 @@ public class Cell : Piece
     private readonly Color colorDefault = new Color(1f, 1f, 1f, 1f);
     private readonly Color colorHighlight = new Color(1f, 1.5f, 1f, 1f);
     private readonly Color colorActivated = new Color(1.5f, 1f, 1f, 1f);
+    private readonly float speedMultiplier = 2.0f;
 
     private float targetAngle = 0f;
     private float direction = 1f;
@@ -28,7 +29,7 @@ public class Cell : Piece
     {
         if (activated)
         {
-            transform.Rotate(Vector3.forward * direction, rotationAngle * Time.deltaTime);
+            transform.Rotate(Vector3.forward * direction, rotationAngle * speedMultiplier * Time.deltaTime);
             if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 5f)
             {
                 Deactivate();
@@ -137,7 +138,7 @@ public class Cell : Piece
         return new List<Cell>
         {
             GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z)]),
-            GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z + 90f)])
+            GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z + rotationAngle)])
         };
     }
 
@@ -158,7 +159,7 @@ public class Cell : Piece
     }
     private int FindReactOffset(float angle)
     {
-        int offset = (int)Mathf.Round(angle / 90f);
+        int offset = (int)Mathf.Round(angle / rotationAngle);
         offset = offset < 0 ? offset + 4 : offset;
         offset = offset > 3 ? offset - 4 : offset;
         return offset;
