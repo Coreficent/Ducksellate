@@ -14,7 +14,6 @@ public class BackgroundMusic : MonoBehaviour
         SceneManager.activeSceneChanged += UpdateMusic;
         FluffingADuck.Play();
     }
-
     private void Awake()
     {
         if (!backgroundMusic)
@@ -29,13 +28,10 @@ public class BackgroundMusic : MonoBehaviour
         }
         Destroy(gameObject);
     }
-
     private void UpdateMusic(Scene current, Scene next)
     {
-        Log.Output("scene ", current.name, next.name);
         PlayTrack(next);
     }
-
     private void PlayTrack(Scene scene)
     {
         if (SceneType.CREDITS.Equals(scene.name))

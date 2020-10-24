@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +35,6 @@ public class Cell : Piece
             }
         }
     }
-
     void OnMouseOver()
     {
         if (!Disabled)
@@ -57,22 +55,6 @@ public class Cell : Piece
             }
         }
     }
-
-    private void OnMouseExit()
-    {
-        SpriteRenderer.material.color = colorDefault;
-    }
-
-    private void ColllectReactableCells()
-    {
-        List<Cell> reactableCells = FindReactableCells();
-
-        foreach (Cell cell in reactableCells)
-        {
-            cell.direction = direction;
-            Main.CellsActivated.Enqueue(cell);
-        }
-    }
     public void Randomize()
     {
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
@@ -87,12 +69,28 @@ public class Cell : Piece
         transform.eulerAngles += new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -rotationAngle);
         return this;
     }
-
     public void React()
     {
         Activate();
     }
+    public bool Tessellated()
+    {
+        return FindReactOffset(transform.eulerAngles.z) == 1 || (X == -1024 && Y == -1024);
+    }
+    private void OnMouseExit()
+    {
+        SpriteRenderer.material.color = colorDefault;
+    }
+    private void ColllectReactableCells()
+    {
+        List<Cell> reactableCells = FindReactableCells();
 
+        foreach (Cell cell in reactableCells)
+        {
+            cell.direction = direction;
+            Main.CellsActivated.Enqueue(cell);
+        }
+    }
     private void Activate()
     {
         targetAngle = CalculateTargetAngle();
@@ -100,7 +98,6 @@ public class Cell : Piece
         AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f));
         activated = true;
     }
-
     private void Deactivate()
     {
         CorrectAngle();
@@ -108,7 +105,6 @@ public class Cell : Piece
         SpriteRenderer.material.color = colorDefault;
         activated = false;
     }
-
     private float CalculateTargetAngle()
     {
         float target = transform.eulerAngles.z + rotationAngle * direction;
@@ -117,13 +113,11 @@ public class Cell : Piece
 
         return target;
     }
-
     private void CorrectAngle()
     {
         // prevents inaccuracy over many iterations due to floating point mathematics
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Round(transform.eulerAngles.z / rotationAngle) * rotationAngle);
     }
-
     private List<Cell> FindReactableCells()
     {
         List<Cell> cells = new List<Cell>();
@@ -138,7 +132,6 @@ public class Cell : Piece
 
         return cells;
     }
-
     private List<Cell> FindCandidateCells(Cell originCell)
     {
         return new List<Cell>
@@ -170,7 +163,6 @@ public class Cell : Piece
         offset = offset > 3 ? offset - 4 : offset;
         return offset;
     }
-
     private Cell GetCell(Cell originCell, Tuple<int, int> coordinate)
     {
         int x = originCell.X + coordinate.Item1;
@@ -184,10 +176,5 @@ public class Cell : Piece
         }
 
         return null;
-    }
-
-    public bool Tessellated()
-    {
-        return FindReactOffset(transform.eulerAngles.z) == 1 || (X == -1024 && Y == -1024);
     }
 }

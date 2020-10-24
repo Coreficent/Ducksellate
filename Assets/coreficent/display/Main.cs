@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,7 +32,6 @@ public class Main : MonoBehaviour
         {
             Instantiate(ButtonCredits);
         }
-        Log.Output("main initialized: ", sceneCurrent);
     }
 
     void Update()
@@ -219,7 +217,7 @@ public class Main : MonoBehaviour
         {
             cell.X = cell.Y = -1024;
             cell.name = "degenerate cell:" + x + ":" + y;
-            Log.Output("cell already populated at", x, y);
+            Debug.Log("cell already populated at: " + x + ":" + y);
         }
         return cell;
     }
