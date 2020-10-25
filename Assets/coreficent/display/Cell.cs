@@ -18,7 +18,7 @@ public class Cell : Piece
     private float targetAngle = 0f;
     private float direction = 1f;
     private bool activated = false;
-    
+
 
     void Start()
     {
@@ -32,7 +32,7 @@ public class Cell : Piece
         if (activated)
         {
             transform.Rotate(Vector3.forward * direction, rotationAngle * speedMultiplier * Time.deltaTime);
-            if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 5f)
+            if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 5.0f * speedMultiplier)
             {
                 Deactivate();
             }
