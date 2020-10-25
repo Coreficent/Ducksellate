@@ -14,9 +14,10 @@ public class Main : MonoBehaviour
 
     public static Cell[,] Cells = new Cell[0, 0];
     public static Queue<Cell> CellsActivated = new Queue<Cell>();
+    public static readonly int INVALID_OFFSET = -1024;
 
     private static bool gameBeat = false;
-    private enum State { WIN, RUN, IDLE };
+    private enum State { Win, Run, Idle };
 
     private string sceneCurrent;
 
@@ -38,7 +39,7 @@ public class Main : MonoBehaviour
     {
         switch (GetState())
         {
-            case State.WIN:
+            case State.Win:
                 if (SceneType.HARD.Equals(sceneCurrent))
                 {
                     gameBeat = true;
@@ -50,13 +51,13 @@ public class Main : MonoBehaviour
                     DisableCells();
                 }
                 break;
-            case State.RUN:
+            case State.Run:
                 while (CellsActivated.Count > 0)
                 {
                     CellsActivated.Dequeue().React();
                 }
                 break;
-            case State.IDLE:
+            case State.Idle:
                 break;
             default:
                 Debug.Log("unexpected state");
@@ -82,7 +83,7 @@ public class Main : MonoBehaviour
     {
         if (Cells.GetLength(0) == 0 && Cells.GetLength(1) == 0)
         {
-            return State.IDLE;
+            return State.Idle;
         }
 
         for (int x = 0; x < Cells.GetLength(0); ++x)
@@ -91,13 +92,13 @@ public class Main : MonoBehaviour
             {
                 if (Cells[x, y] && !Cells[x, y].Tessellated())
                 {
-                    return State.RUN;
+                    return State.Run;
                 }
             }
         }
 
 
-        return State.WIN;
+        return State.Win;
     }
 
     private void GenerateLevel()
@@ -117,12 +118,6 @@ public class Main : MonoBehaviour
                 PopulateCell(board, 2 + rotateOffsetX, 2 + rotateOffsetY).RotateLeft();
                 PopulateCell(board, 3 + rotateOffsetX, 1 + rotateOffsetY);
                 PopulateCell(board, 4 + rotateOffsetX, 0 + rotateOffsetY).RotateLeft();
-
-                if (Log.DEBUG)
-                {
-                    PopulateCell(board, 1, 5);
-                    PopulateCell(board, 1, 5);
-                }
 
                 PopulateObstacle(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
                 break;
@@ -215,7 +210,7 @@ public class Main : MonoBehaviour
         }
         else
         {
-            cell.X = cell.Y = -1024;
+            cell.X = cell.Y = INVALID_OFFSET;
             cell.name = "degenerate cell:" + x + ":" + y;
             Debug.Log("cell already populated at: " + x + ":" + y);
         }

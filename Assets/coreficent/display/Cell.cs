@@ -18,9 +18,11 @@ public class Cell : Piece
     private float targetAngle = 0f;
     private float direction = 1f;
     private bool activated = false;
+    
 
     void Start()
     {
+        AudioSource.pitch = UnityEngine.Random.Range(0.8f, 1.25f);
         Reposition();
         transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);
         CorrectAngle();
@@ -76,7 +78,7 @@ public class Cell : Piece
     }
     public bool Tessellated()
     {
-        return FindReactOffset(transform.eulerAngles.z) == 1 || (X == -1024 && Y == -1024);
+        return FindReactOffset(transform.eulerAngles.z) == 1 || (X == Main.INVALID_OFFSET && Y == Main.INVALID_OFFSET);
     }
     private void OnMouseExit()
     {
@@ -96,6 +98,7 @@ public class Cell : Piece
     {
         targetAngle = CalculateTargetAngle();
         SpriteRenderer.material.color = colorActivated;
+        AudioSource.volume = UnityEngine.Random.Range(0.75f, 1.0f);
         AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f));
         activated = true;
     }
