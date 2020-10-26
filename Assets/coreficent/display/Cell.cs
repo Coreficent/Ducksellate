@@ -32,7 +32,7 @@ public class Cell : Piece
         if (activated)
         {
             transform.Rotate(Vector3.forward * direction, rotationAngle * speedMultiplier * Time.deltaTime);
-            if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 5.0f * speedMultiplier)
+            if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 7.5f * speedMultiplier)
             {
                 Deactivate();
             }
