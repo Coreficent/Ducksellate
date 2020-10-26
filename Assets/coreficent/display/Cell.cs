@@ -82,7 +82,10 @@ public class Cell : Piece
     }
     private void OnMouseExit()
     {
-        SpriteRenderer.material.color = colorDefault;
+        if (!activated)
+        {
+            SpriteRenderer.material.color = colorDefault;
+        }
     }
     private void ColllectReactableCells()
     {
