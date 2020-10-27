@@ -9,16 +9,17 @@ namespace Coreficent.Display
 {
     public class SpriteButton : MonoBehaviour
     {
-        public string scene;
+        public string Scene;
         void OnMouseOver()
         {
             if (Input.GetMouseButtonDown(0))
             {
-                switch (scene)
+                switch (Scene)
                 {
                     case "Exit":
                         Application.Quit();
                         break;
+                    case "Start":
                     case "Next":
                     case "Skip":
                         if (Transitioner.TransitionReady)
@@ -27,7 +28,7 @@ namespace Coreficent.Display
                         }
                         break;
                     default:
-                        SceneManager.LoadScene(scene);
+                        SceneManager.LoadScene(Scene);
                         break;
                 }
             }

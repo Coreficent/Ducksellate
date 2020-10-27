@@ -9,7 +9,6 @@ namespace Coreficent.Display
     {
         public SpriteRenderer SpriteRenderer;
         public AudioSource AudioSource;
-        public bool Disabled { get; set; }
 
         private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
 
@@ -21,7 +20,7 @@ namespace Coreficent.Display
         private float targetAngle = 0f;
         private float direction = 1f;
         private bool activated = false;
-
+        public bool Disabled { get; set; }
 
         void Start()
         {

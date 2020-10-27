@@ -9,15 +9,13 @@ namespace Coreficent.Display
 {
     public abstract class Piece : MonoBehaviour, ITransitionable
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-
         protected readonly float rotationAngle = 90f;
         protected readonly float boardAngle = 45f;
 
         private readonly float space = 1f;
-
         private Vector3 delta = new Vector3(1.0f, 1.0f, 1.0f);
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public virtual void TransitionOut()
         {

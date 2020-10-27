@@ -9,11 +9,7 @@ namespace Coreficent.Display
 {
     public class Fader : Piece
     {
-        private SpriteRenderer spriteRenderer;
-        void Start()
-        {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-        }
+        public SpriteRenderer spriteRenderer;
 
         public override void TransitionOut()
         {
