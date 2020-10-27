@@ -13,13 +13,13 @@ namespace Coreficent.Main
         public static Cell[,] Cells = new Cell[0, 0];
         public static Queue<Cell> CellsActivated = new Queue<Cell>();
         public static readonly int INVALID_OFFSET = -1024;
+        public static MonoBehaviour Handler = null;
 
         private static bool gameBeat = false;
 
         public Cell Cell;
         public Obstacle Obstacle;
         public GameObject Board;
-        public SpriteButton ButtonNext;
         public SpriteButton ButtonSkip;
         public SpriteButton ButtonCredits;
 
@@ -29,8 +29,8 @@ namespace Coreficent.Main
 
         void Start()
         {
+            Handler = this;
             sceneCurrent = SceneManager.GetActiveScene().name;
-            GenerateLevel();
             if (!SceneType.HARD.Equals(sceneCurrent) && !SceneType.MENU.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
             {
                 Instantiate(ButtonSkip);
@@ -39,6 +39,7 @@ namespace Coreficent.Main
             {
                 Instantiate(ButtonCredits);
             }
+            GenerateLevel();
         }
 
         void Update()
@@ -53,8 +54,8 @@ namespace Coreficent.Main
                     }
                     else
                     {
-                        Instantiate(ButtonNext);
                         DisableCells();
+                        Transitioner.TransitionOut();
                     }
                     break;
                 case State.Run:
@@ -198,7 +199,16 @@ namespace Coreficent.Main
                     Debug.Log("unexpected level");
                     break;
             }
-            StartCoroutine(Transitioner.TransitionIn());
+            Transitioner.TransitionIn();
+        }
+        private GameObject PopulateObject(GameObject gameObject, Vector3 position)
+        {
+            GameObject result = Instantiate(gameObject);
+
+            result.transform.position = position;
+            result.transform.eulerAngles = new Vector3(0.0f, 0.0f, 45.0f);
+
+            return result;
         }
         private Cell PopulateCell(GameObject currentBoard, int x, int y)
         {

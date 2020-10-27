@@ -23,7 +23,7 @@ namespace Coreficent.Display
                     case "Skip":
                         if (Transitioner.TransitionReady)
                         {
-                            StartCoroutine(Transitioner.TransitionOut());
+                            Transitioner.TransitionOut();
                         }
                         break;
                     default:

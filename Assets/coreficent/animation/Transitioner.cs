@@ -7,10 +7,23 @@ using System.Linq;
 
 namespace Coreficent.Animation
 {
-    public class Transitioner
+    public class Transitioner : MonoBehaviour
     {
         public static bool TransitionReady = true;
-        public static IEnumerator TransitionIn()
+
+        public static void TransitionIn()
+        {
+            Main.Main.Handler.StopAllCoroutines();
+            Main.Main.Handler.StartCoroutine(TransitionRoutineIn());
+        }
+
+        public static void TransitionOut()
+        {
+            Main.Main.Handler.StopAllCoroutines();
+            Main.Main.Handler.StartCoroutine(TransitionRoutineOut());
+        }
+
+        private static IEnumerator TransitionRoutineIn()
         {
             TransitionReady = false;
             List<ITransitionable> transitionables = FindTransitionables();
@@ -38,7 +51,7 @@ namespace Coreficent.Animation
             TransitionReady = true;
         }
 
-        public static IEnumerator TransitionOut()
+        private static IEnumerator TransitionRoutineOut()
         {
             TransitionReady = false;
             List<ITransitionable> transitionables = FindTransitionables();
