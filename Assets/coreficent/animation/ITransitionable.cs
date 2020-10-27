@@ -6,5 +6,7 @@
         void TransitionOut();
         bool TransitionInComplete();
         bool TransitionOutComplete();
+        void Maximize();
+        void Minimize();
     }
 }

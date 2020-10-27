@@ -11,56 +11,56 @@ namespace Coreficent.Animation
     {
         public static IEnumerator TransitionIn()
         {
-            Piece[] pieces = Object.FindObjectsOfType<Piece>();
+            List<ITransitionable> transitionables = FindTransitionables();
 
-            // new List<MonoBehaviour>(Object.FindObjectsOfType<MonoBehaviour>()).Where(i => i is ITransitionable).ToList();
-
-            foreach (Piece piece in pieces)
+            foreach (ITransitionable transitionable in transitionables)
             {
-                if (!piece.TransitionOutComplete())
-                {
-                    piece.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-                }
+                transitionable.Minimize();
             }
 
-            bool expandedAll;
+            bool transitionInComplete;
             do
             {
-                expandedAll = true;
+                transitionInComplete = true;
 
-                foreach (Piece piece in pieces)
+                foreach (ITransitionable transformable in transitionables)
                 {
-                    if (!piece.TransitionInComplete())
+                    if (!transformable.TransitionInComplete())
                     {
-                        piece.TransitionIn();
-                        expandedAll = false;
+                        transformable.TransitionIn();
+                        transitionInComplete = false;
                     }
                 }
                 yield return null;
-            } while (!expandedAll);
+            } while (!transitionInComplete);
         }
 
         public static IEnumerator TransitionOut()
         {
-            Piece[] pieces = UnityEngine.Object.FindObjectsOfType<Piece>();
+            List<ITransitionable> transitionables = FindTransitionables();
 
-            bool shrunkenAll;
+            bool transitionOutComplete;
             do
             {
-                shrunkenAll = true;
+                transitionOutComplete = true;
 
-                foreach (Piece piece in pieces)
+                foreach (Piece transitionable in transitionables)
                 {
-                    if (!piece.TransitionOutComplete())
+                    if (!transitionable.TransitionOutComplete())
                     {
-                        piece.TransitionOut();
-                        shrunkenAll = false;
+                        transitionable.TransitionOut();
+                        transitionOutComplete = false;
                     }
                 }
                 yield return null;
-            } while (!shrunkenAll);
+            } while (!transitionOutComplete);
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        private static List<ITransitionable> FindTransitionables()
+        {
+            return new List<MonoBehaviour>(Object.FindObjectsOfType<MonoBehaviour>()).Where(i => i is ITransitionable).Select(i => (ITransitionable)i).ToList(); ;
         }
     }
 }

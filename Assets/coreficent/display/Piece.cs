@@ -7,7 +7,7 @@ using Coreficent.Animation;
 
 namespace Coreficent.Display
 {
-    public abstract class Piece : MonoBehaviour , ITransitionable
+    public abstract class Piece : MonoBehaviour, ITransitionable
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -48,6 +48,14 @@ namespace Coreficent.Display
         public virtual bool TransitionInComplete()
         {
             return transform.localScale.x >= 1.0 && transform.localScale.y >= 1.0 && transform.localScale.z >= 1.0;
+        }
+        public virtual void Maximize()
+        {
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        }
+        public virtual void Minimize()
+        {
+            transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
         }
         protected void Reposition()
         {
