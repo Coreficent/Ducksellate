@@ -5,50 +5,53 @@ using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class Fader : Piece
+namespace Coreficent.Display
 {
-    private SpriteRenderer spriteRenderer;
-    void Start()
+    public class Fader : Piece
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+        private SpriteRenderer spriteRenderer;
+        void Start()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
 
-    public override void TransitionOut()
-    {
-        if (!TransitionOutComplete())
+        public override void TransitionOut()
         {
-            spriteRenderer.material.color -= new Color(0.0f, 0.0f, 0.0f, 0.5f * Time.deltaTime);
+            if (!TransitionOutComplete())
+            {
+                spriteRenderer.material.color -= new Color(0.0f, 0.0f, 0.0f, 0.75f * Time.deltaTime);
+            }
+            else
+            {
+                Minimize();
+            }
         }
-        else
+        public override void TransitionIn()
         {
-            Minimize();
+            if (!TransitionInComplete())
+            {
+                spriteRenderer.material.color += new Color(0.0f, 0.0f, 0.0f, 0.75f * Time.deltaTime);
+            }
+            else
+            {
+                Maximize();
+            }
         }
-    }
-    public override void TransitionIn()
-    {
-        if (!TransitionInComplete())
+        public override bool TransitionOutComplete()
         {
-            spriteRenderer.material.color += new Color(0.0f, 0.0f, 0.0f, 0.5f * Time.deltaTime);
+            return spriteRenderer.material.color.a <= 0.0f;
         }
-        else
+        public override bool TransitionInComplete()
         {
-            Maximize();
+            return spriteRenderer.material.color.a >= 1.0f;
         }
-    }
-    public override bool TransitionOutComplete()
-    {
-        return spriteRenderer.material.color.a <= 0.0f;
-    }
-    public override bool TransitionInComplete()
-    {
-        return spriteRenderer.material.color.a >= 1.0f;
-    }
-    public override void Maximize()
-    {
-        spriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-    public override void Minimize()
-    {
-        spriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        public override void Maximize()
+        {
+            spriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+        public override void Minimize()
+        {
+            spriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        }
     }
 }
