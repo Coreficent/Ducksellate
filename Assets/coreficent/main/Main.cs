@@ -182,13 +182,8 @@ namespace Coreficent.Main
                         {
                             if (x + y > 5 && x + y < 19 && y - x < 7)
                             {
-                                Cell currentCell = Instantiate(Cell, board.transform);
-                                currentCell.X = x;
-                                currentCell.Y = y;
-                                currentCell.Randomize();
-                                Cells[x, y] = currentCell;
+                                PopulateCell(board, x, y).Randomize();
                             }
-
                         }
                     }
                     break;
