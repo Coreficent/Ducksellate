@@ -19,7 +19,6 @@ namespace Coreficent.Main
 
         public Cell Cell;
         public Obstacle LilliePad;
-        public Obstacle Rock;
         
         public GameObject Board;
         public SpriteButton ButtonSkip;
@@ -137,9 +136,6 @@ namespace Coreficent.Main
                         PopulateObject(board, LilliePad, max - 1 + 2, i + 2);
                     }
                     PopulateObject(board, LilliePad, 6, 0);
-
-                    PopulateObject(board, Rock, -2, 2);
-                    PopulateObject(board, Rock, 4, 8);
 
                     break;
                 case (SceneType.TUTORIAL_REACT):
