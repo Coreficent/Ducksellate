@@ -22,6 +22,7 @@ public class Cell : Piece
 
     void Start()
     {
+        RandomizeDelta();
         AudioSource.pitch = UnityEngine.Random.Range(0.8f, 1.25f);
         Reposition();
         transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);

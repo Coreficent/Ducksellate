@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
+    public static Cell[,] Cells = new Cell[0, 0];
+    public static Queue<Cell> CellsActivated = new Queue<Cell>();
+    public static readonly int INVALID_OFFSET = -1024;
+
+    private static bool gameBeat = false;
+
     public Cell Cell;
     public Obstacle Obstacle;
     public GameObject Board;
@@ -12,11 +19,6 @@ public class Main : MonoBehaviour
     public SpriteButton ButtonSkip;
     public SpriteButton ButtonCredits;
 
-    public static Cell[,] Cells = new Cell[0, 0];
-    public static Queue<Cell> CellsActivated = new Queue<Cell>();
-    public static readonly int INVALID_OFFSET = -1024;
-
-    private static bool gameBeat = false;
     private enum State { Win, Run, Idle };
 
     private string sceneCurrent;
@@ -197,6 +199,35 @@ public class Main : MonoBehaviour
                 Debug.Log("unexpected level");
                 break;
         }
+        StartCoroutine(Transition());
+    }
+    private IEnumerator Transition()
+    {
+        Piece[] pieces = FindObjectsOfType<Piece>();
+
+        foreach (Piece piece in pieces)
+        {
+            if (!piece.Shrinken())
+            {
+                piece.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            }
+        }
+
+        bool expandedAll;
+        do
+        {
+            expandedAll = true;
+
+            foreach (Piece piece in pieces)
+            {
+                if (!piece.Expanded())
+                {
+                    piece.Expand();
+                    expandedAll = false;
+                }
+            }
+            yield return null;
+        } while (!expandedAll);
     }
     private Cell PopulateCell(GameObject currentBoard, int x, int y)
     {
