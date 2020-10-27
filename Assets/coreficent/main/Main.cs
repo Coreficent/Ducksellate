@@ -19,7 +19,7 @@ namespace Coreficent.Main
 
         public Cell Cell;
         public Obstacle LilliePad;
-        
+
         public GameObject Board;
         public SpriteButton ButtonSkip;
         public SpriteButton ButtonCredits;
@@ -32,7 +32,7 @@ namespace Coreficent.Main
         {
             Handler = this;
             sceneCurrent = SceneManager.GetActiveScene().name;
-            if (!SceneType.HARD.Equals(sceneCurrent) && !SceneType.MENU.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
+            if (!SceneType.HARD.Equals(sceneCurrent) && !SceneType.REPLAY.Equals(sceneCurrent) && !SceneType.MENU.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
             {
                 Instantiate(ButtonSkip);
             }
@@ -51,13 +51,10 @@ namespace Coreficent.Main
                     if (SceneType.HARD.Equals(sceneCurrent))
                     {
                         gameBeat = true;
-                        SceneManager.LoadScene(SceneType.REPLAY);
                     }
-                    else
-                    {
-                        DisableCells();
-                        Transitioner.TransitionOut();
-                    }
+                    DisableCells();
+                    Transitioner.TransitionOut();
+
                     break;
                 case State.Run:
                     while (CellsActivated.Count > 0)
@@ -200,8 +197,7 @@ namespace Coreficent.Main
                     }
                     break;
                 case (SceneType.CREDITS):
-                    Cells = new Cell[0, 0];
-                    break;
+                case (SceneType.REPLAY):
                 case (SceneType.MENU):
                     Cells = new Cell[0, 0];
                     break;
