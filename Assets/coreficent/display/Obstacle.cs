@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Transactions;
 using UnityEngine;
 
-public class Obstacle : Piece
+namespace Coreficent.Display
 {
-    void Start()
+    public class Obstacle : Piece
     {
-        RandomizeDelta();
-        Reposition();
+        void Start()
+        {
+            RandomizeDelta();
+            Reposition();
+        }
     }
 }

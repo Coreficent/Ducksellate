@@ -4,56 +4,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SpriteButton : MonoBehaviour
+namespace Coreficent.Display
 {
-    public string scene;
-    void OnMouseOver()
+    public class SpriteButton : MonoBehaviour
     {
-        if (Input.GetMouseButtonDown(0))
+        public string scene;
+        void OnMouseOver()
         {
-            switch (scene)
+            if (Input.GetMouseButtonDown(0))
             {
-                case "Exit":
-                    Application.Quit();
-                    break;
-                case "Next":
-                    Next();
-                    break;
-                case "Skip":
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                    break;
-                default:
-                    SceneManager.LoadScene(scene);
-                    break;
-            }
-        }
-    }
-
-    private void Next()
-    {
-        StartCoroutine(Transition());
-    }
-
-    private IEnumerator Transition()
-    {
-        Piece[] pieces = FindObjectsOfType<Piece>();
-
-        bool shrunkenAll;
-        do
-        {
-            shrunkenAll = true;
-
-            foreach (Piece piece in pieces)
-            {
-                if (!piece.Shrinken())
+                switch (scene)
                 {
-                    piece.Shrink();
-                    shrunkenAll = false;
+                    case "Exit":
+                        Application.Quit();
+                        break;
+                    case "Next":
+                        Next();
+                        break;
+                    case "Skip":
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                        break;
+                    default:
+                        SceneManager.LoadScene(scene);
+                        break;
                 }
             }
-            yield return null;
-        } while (!shrunkenAll);
+        }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        private void Next()
+        {
+            StartCoroutine(Transition());
+        }
+
+        private IEnumerator Transition()
+        {
+            Piece[] pieces = FindObjectsOfType<Piece>();
+
+            bool shrunkenAll;
+            do
+            {
+                shrunkenAll = true;
+
+                foreach (Piece piece in pieces)
+                {
+                    if (!piece.Shrinken())
+                    {
+                        piece.Shrink();
+                        shrunkenAll = false;
+                    }
+                }
+                yield return null;
+            } while (!shrunkenAll);
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 }
