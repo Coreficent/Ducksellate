@@ -18,7 +18,9 @@ namespace Coreficent.Main
         private static bool gameBeat = false;
 
         public Cell Cell;
-        public Obstacle Obstacle;
+        public Obstacle LilliePad;
+        public Obstacle Rock;
+        
         public GameObject Board;
         public SpriteButton ButtonSkip;
         public SpriteButton ButtonCredits;
@@ -127,6 +129,18 @@ namespace Coreficent.Main
                     PopulateCell(board, 4 + rotateOffsetX, 0 + rotateOffsetY).RotateLeft();
 
                     FillObstacles(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
+
+                    int max = 5;
+                    for (int i = 0; i < max; ++i)
+                    {
+                        PopulateObject(board, LilliePad, i, 0);
+                        PopulateObject(board, LilliePad, max - 1 + 2, i + 2);
+                    }
+                    PopulateObject(board, LilliePad, 6, 0);
+
+                    PopulateObject(board, Rock, -2, 2);
+                    PopulateObject(board, Rock, 4, 8);
+
                     break;
                 case (SceneType.TUTORIAL_REACT):
                     Cells = new Cell[7, 7];
@@ -201,12 +215,14 @@ namespace Coreficent.Main
             }
             Transitioner.TransitionIn();
         }
-        private GameObject PopulateObject(GameObject gameObject, Vector3 position)
+        private Piece PopulateObject(GameObject currentBoard, Piece gameObject, int x, int y)
         {
-            GameObject result = Instantiate(gameObject);
+            Piece result = Instantiate(gameObject, currentBoard.transform);
 
-            result.transform.position = position;
-            result.transform.eulerAngles = new Vector3(0.0f, 0.0f, 45.0f);
+            result.X = x;
+            result.Y = y;
+
+            result.name = "decor" + " " + x + ":" + y;
 
             return result;
         }
@@ -238,7 +254,7 @@ namespace Coreficent.Main
                     {
                         if (condition(x, y))
                         {
-                            Obstacle currentCell = Instantiate(Obstacle, board.transform);
+                            Obstacle currentCell = Instantiate(LilliePad, board.transform);
                             currentCell.X = x;
                             currentCell.Y = y;
                         }

@@ -27,7 +27,7 @@ namespace Coreficent.Display
             }
             else
             {
-                transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+                Minimize();
             }
         }
         public virtual void TransitionIn()
@@ -38,7 +38,7 @@ namespace Coreficent.Display
             }
             else
             {
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                Maximize();
             }
         }
         public virtual bool TransitionOutComplete()
