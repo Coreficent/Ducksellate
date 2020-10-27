@@ -30,11 +30,11 @@ namespace Coreficent.Display
         }
         public override bool TransitionOutComplete()
         {
-            return spriteRenderer.material.color.a <= 0.0f;
+            return spriteRenderer.material.color.a <= 0.01f;
         }
         public override bool TransitionInComplete()
         {
-            return spriteRenderer.material.color.a >= 1.0f;
+            return spriteRenderer.material.color.a >= 0.99f;
         }
         public override void Maximize()
         {

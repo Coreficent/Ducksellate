@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Coreficent.Main;
-using Coreficent.Display;
+﻿using UnityEngine;
 using Coreficent.Animation;
 
 namespace Coreficent.Display
@@ -41,11 +37,11 @@ namespace Coreficent.Display
         }
         public virtual bool TransitionOutComplete()
         {
-            return transform.localScale.x <= 0 && transform.localScale.y <= 0 && transform.localScale.z <= 0;
+            return transform.localScale.x <= 0.01 && transform.localScale.y <= 0 && transform.localScale.z <= 0.01;
         }
         public virtual bool TransitionInComplete()
         {
-            return transform.localScale.x >= 1.0 && transform.localScale.y >= 1.0 && transform.localScale.z >= 1.0;
+            return transform.localScale.x >= 0.99 && transform.localScale.y >= 1.0 && transform.localScale.z >= 0.99;
         }
         public virtual void Maximize()
         {
