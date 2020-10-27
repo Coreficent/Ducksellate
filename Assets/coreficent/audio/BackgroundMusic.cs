@@ -36,7 +36,7 @@ namespace Coreficent.Audio
         }
         private void PlayTrack(Scene scene)
         {
-            if (Coreficent.Display.SceneType.CREDITS.Equals(scene.name))
+            if (Display.SceneType.CREDITS == scene.name)
             {
                 if (FluffingADuck.isPlaying)
                 {

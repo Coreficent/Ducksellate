@@ -32,11 +32,14 @@ namespace Coreficent.Main
         {
             Handler = this;
             sceneCurrent = SceneManager.GetActiveScene().name;
-            if (!SceneType.HARD.Equals(sceneCurrent) && !SceneType.REPLAY.Equals(sceneCurrent) && !SceneType.MENU.Equals(sceneCurrent) && gameBeat || SceneType.TUTORIAL_REACT.Equals(sceneCurrent) || SceneType.TUTORIAL_ROTATE.Equals(sceneCurrent))
+            if (gameBeat || SceneType.TUTORIAL_REACT == sceneCurrent || SceneType.TUTORIAL_ROTATE == sceneCurrent)
             {
-                Instantiate(ButtonSkip);
+                if (SceneType.HARD != sceneCurrent && SceneType.REPLAY != sceneCurrent && SceneType.MENU != sceneCurrent && SceneType.CREDITS != sceneCurrent)
+                {
+                    Instantiate(ButtonSkip);
+                }
             }
-            if (gameBeat && SceneType.MENU.Equals(sceneCurrent))
+            if (gameBeat && SceneType.MENU == sceneCurrent)
             {
                 Instantiate(ButtonCredits);
             }
@@ -48,7 +51,7 @@ namespace Coreficent.Main
             switch (GetState())
             {
                 case State.Win:
-                    if (SceneType.HARD.Equals(sceneCurrent))
+                    if (SceneType.HARD == sceneCurrent)
                     {
                         gameBeat = true;
                     }
