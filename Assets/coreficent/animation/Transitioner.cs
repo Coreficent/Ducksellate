@@ -9,8 +9,6 @@ namespace Coreficent.Animation
 {
     public class Transitioner : MonoBehaviour
     {
-        public static bool TransitionReady = true;
-
         public static void TransitionIn()
         {
             Main.Main.Handler.StopAllCoroutines();
@@ -25,7 +23,6 @@ namespace Coreficent.Animation
 
         private static IEnumerator TransitionRoutineIn()
         {
-            TransitionReady = false;
             List<ITransitionable> transitionables = FindTransitionables();
 
             foreach (ITransitionable transitionable in transitionables)
@@ -48,12 +45,10 @@ namespace Coreficent.Animation
                 }
                 yield return null;
             } while (!transitionInComplete);
-            TransitionReady = true;
         }
 
         private static IEnumerator TransitionRoutineOut()
         {
-            TransitionReady = false;
             List<ITransitionable> transitionables = FindTransitionables();
 
             bool transitionOutComplete;
@@ -73,7 +68,6 @@ namespace Coreficent.Animation
             } while (!transitionOutComplete);
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            TransitionReady = true;
         }
 
         private static List<ITransitionable> FindTransitionables()

@@ -16,16 +16,13 @@ namespace Coreficent.Display
             {
                 switch (Scene)
                 {
-                    case "Exit":
+                    case "Quit":
                         Application.Quit();
                         break;
                     case "Start":
                     case "Next":
                     case "Skip":
-                        if (Transitioner.TransitionReady)
-                        {
-                            Transitioner.TransitionOut();
-                        }
+                        Transitioner.TransitionOut();
                         break;
                     default:
                         SceneManager.LoadScene(Scene);
