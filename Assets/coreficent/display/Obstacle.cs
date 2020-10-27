@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Coreficent.Display
 {
-    public class Obstacle : Piece
+    public class Obstacle : Piece 
     {
         void Start()
         {

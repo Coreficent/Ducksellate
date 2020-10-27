@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Coreficent.Main;
 using Coreficent.Display;
+using Coreficent.Animation;
 
 namespace Coreficent.Display
 {
-    public class Piece : MonoBehaviour
+    public abstract class Piece : MonoBehaviour , ITransitionable
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -18,9 +19,9 @@ namespace Coreficent.Display
 
         private Vector3 delta = new Vector3(0.75f, 0.75f, 0.75f);
 
-        public void Shrink()
+        public virtual void TransitionOut()
         {
-            if (!Shrinken())
+            if (!TransitionOutComplete())
             {
                 transform.localScale -= delta * Time.deltaTime;
             }
@@ -29,9 +30,9 @@ namespace Coreficent.Display
                 transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
             }
         }
-        public void Expand()
+        public virtual void TransitionIn()
         {
-            if (!Expanded())
+            if (!TransitionInComplete())
             {
                 transform.localScale += delta * Time.deltaTime;
             }
@@ -40,11 +41,11 @@ namespace Coreficent.Display
                 transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             }
         }
-        public bool Shrinken()
+        public virtual bool TransitionOutComplete()
         {
             return transform.localScale.x <= 0 && transform.localScale.y <= 0 && transform.localScale.z <= 0;
         }
-        public bool Expanded()
+        public virtual bool TransitionInComplete()
         {
             return transform.localScale.x >= 1.0 && transform.localScale.y >= 1.0 && transform.localScale.z >= 1.0;
         }

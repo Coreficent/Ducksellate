@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Coreficent.Display;
+using Coreficent.Animation;
 
 namespace Coreficent.Main
 {
@@ -197,36 +198,9 @@ namespace Coreficent.Main
                     Debug.Log("unexpected level");
                     break;
             }
-            StartCoroutine(Transition());
+            StartCoroutine(Transitioner.TransitionIn());
         }
-        private IEnumerator Transition()
-        {
-            Piece[] pieces = FindObjectsOfType<Piece>();
-
-            foreach (Piece piece in pieces)
-            {
-                if (!piece.Shrinken())
-                {
-                    piece.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-                }
-            }
-
-            bool expandedAll;
-            do
-            {
-                expandedAll = true;
-
-                foreach (Piece piece in pieces)
-                {
-                    if (!piece.Expanded())
-                    {
-                        piece.Expand();
-                        expandedAll = false;
-                    }
-                }
-                yield return null;
-            } while (!expandedAll);
-        }
+        
         private Cell PopulateCell(GameObject currentBoard, int x, int y)
         {
             Cell cell = Instantiate(Cell, currentBoard.transform);

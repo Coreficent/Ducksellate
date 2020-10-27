@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Coreficent.Animation;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Coreficent.Display
                         Application.Quit();
                         break;
                     case "Next":
-                        Next();
+                        StartCoroutine(Transitioner.TransitionOut());
                         break;
                     case "Skip":
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -29,34 +30,6 @@ namespace Coreficent.Display
                         break;
                 }
             }
-        }
-
-        private void Next()
-        {
-            StartCoroutine(Transition());
-        }
-
-        private IEnumerator Transition()
-        {
-            Piece[] pieces = FindObjectsOfType<Piece>();
-
-            bool shrunkenAll;
-            do
-            {
-                shrunkenAll = true;
-
-                foreach (Piece piece in pieces)
-                {
-                    if (!piece.Shrinken())
-                    {
-                        piece.Shrink();
-                        shrunkenAll = false;
-                    }
-                }
-                yield return null;
-            } while (!shrunkenAll);
-
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
