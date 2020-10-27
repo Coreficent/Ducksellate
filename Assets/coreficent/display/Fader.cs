@@ -1,9 +1,4 @@
-﻿using Coreficent.Animation;
-using Coreficent.Display;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.UIElements;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Coreficent.Display
 {
