@@ -17,7 +17,7 @@ namespace Coreficent.Display
 
         private readonly float space = 1f;
 
-        private Vector3 delta = new Vector3(0.75f, 0.75f, 0.75f);
+        private Vector3 delta = new Vector3(1.0f, 1.0f, 1.0f);
 
         public virtual void TransitionOut()
         {

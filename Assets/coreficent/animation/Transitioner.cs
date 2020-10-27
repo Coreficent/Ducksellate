@@ -9,8 +9,10 @@ namespace Coreficent.Animation
 {
     public class Transitioner
     {
+        public static bool TransitionReady = true;
         public static IEnumerator TransitionIn()
         {
+            TransitionReady = false;
             List<ITransitionable> transitionables = FindTransitionables();
 
             foreach (ITransitionable transitionable in transitionables)
@@ -33,10 +35,12 @@ namespace Coreficent.Animation
                 }
                 yield return null;
             } while (!transitionInComplete);
+            TransitionReady = true;
         }
 
         public static IEnumerator TransitionOut()
         {
+            TransitionReady = false;
             List<ITransitionable> transitionables = FindTransitionables();
 
             bool transitionOutComplete;
@@ -56,6 +60,7 @@ namespace Coreficent.Animation
             } while (!transitionOutComplete);
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            TransitionReady = true;
         }
 
         private static List<ITransitionable> FindTransitionables()

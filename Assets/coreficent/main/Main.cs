@@ -125,7 +125,7 @@ namespace Coreficent.Main
                     PopulateCell(board, 3 + rotateOffsetX, 1 + rotateOffsetY);
                     PopulateCell(board, 4 + rotateOffsetX, 0 + rotateOffsetY).RotateLeft();
 
-                    PopulateObstacle(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
+                    FillObstacles(board, (x, y) => x + y > 4 && x + y < 8 && !(x == 6 && y == 0) && !(x == 0 && y == 6));
                     break;
                 case (SceneType.TUTORIAL_REACT):
                     Cells = new Cell[7, 7];
@@ -138,7 +138,7 @@ namespace Coreficent.Main
                     PopulateCell(board, 0 + ox, 6 + oy).RotateLeft();
 
                     PopulateCell(board, 3, 3);
-                    PopulateObstacle(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
+                    FillObstacles(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
                     break;
                 case (SceneType.EASY):
                     Cells = new Cell[7, 7];
@@ -149,7 +149,7 @@ namespace Coreficent.Main
                         PopulateCell(board, i, 0);
                     }
                     PopulateCell(board, 6, 0).RotateLeft();
-                    PopulateObstacle(board, (x, y) => x - y > -1);
+                    FillObstacles(board, (x, y) => x - y > -1);
                     break;
                 case (SceneType.MEDIUM):
                     Cells = new Cell[7, 7];
@@ -171,7 +171,7 @@ namespace Coreficent.Main
                     }
                     PopulateCell(board, 3, 3).Randomize();
 
-                    PopulateObstacle(board, (x, y) => true);
+                    FillObstacles(board, (x, y) => true);
                     break;
                 case (SceneType.HARD):
                     int size = 13;
@@ -200,7 +200,6 @@ namespace Coreficent.Main
             }
             StartCoroutine(Transitioner.TransitionIn());
         }
-        
         private Cell PopulateCell(GameObject currentBoard, int x, int y)
         {
             Cell cell = Instantiate(Cell, currentBoard.transform);
@@ -219,7 +218,7 @@ namespace Coreficent.Main
             }
             return cell;
         }
-        private void PopulateObstacle(GameObject board, Func<int, int, bool> condition)
+        private void FillObstacles(GameObject board, Func<int, int, bool> condition)
         {
             for (int x = 0; x < Cells.GetLength(0); ++x)
             {

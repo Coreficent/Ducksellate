@@ -20,10 +20,11 @@ namespace Coreficent.Display
                         Application.Quit();
                         break;
                     case "Next":
-                        StartCoroutine(Transitioner.TransitionOut());
-                        break;
                     case "Skip":
-                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                        if (Transitioner.TransitionReady)
+                        {
+                            StartCoroutine(Transitioner.TransitionOut());
+                        }
                         break;
                     default:
                         SceneManager.LoadScene(scene);
