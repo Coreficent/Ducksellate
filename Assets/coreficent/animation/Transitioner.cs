@@ -14,13 +14,11 @@ namespace Coreficent.Animation
             Main.Main.Handler.StopAllCoroutines();
             Main.Main.Handler.StartCoroutine(TransitionRoutineIn());
         }
-
         public static void TransitionOut(string scene = null)
         {
             Main.Main.Handler.StopAllCoroutines();
             Main.Main.Handler.StartCoroutine(TransitionRoutineOut(scene));
         }
-
         private static IEnumerator TransitionRoutineIn()
         {
             List<ITransitionable> transitionables = FindTransitionables();
@@ -46,7 +44,6 @@ namespace Coreficent.Animation
                 yield return null;
             } while (!transitionInComplete);
         }
-
         private static IEnumerator TransitionRoutineOut(string scene = null)
         {
             List<ITransitionable> transitionables = FindTransitionables();
@@ -76,7 +73,6 @@ namespace Coreficent.Animation
                 SceneManager.LoadScene(scene);
             }
         }
-
         private static List<ITransitionable> FindTransitionables()
         {
             return new List<MonoBehaviour>(FindObjectsOfType<MonoBehaviour>()).Where(i => i is ITransitionable).Select(i => (ITransitionable)i).ToList(); ;

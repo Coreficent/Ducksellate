@@ -1,16 +1,21 @@
-﻿using UnityEngine;
+﻿using Coreficent.Utility;
+using UnityEngine;
 
 namespace Coreficent.Display
 {
     public class Fader : Piece
     {
-        public SpriteRenderer spriteRenderer;
+        public SpriteRenderer SpriteRenderer;
 
+        void Start()
+        {
+            SanityCheck.Check(this, SpriteRenderer);
+        }
         public override void TransitionOut()
         {
             if (!TransitionOutComplete())
             {
-                spriteRenderer.material.color -= new Color(0.0f, 0.0f, 0.0f, 0.75f * Time.deltaTime);
+                SpriteRenderer.material.color -= new Color(0.0f, 0.0f, 0.0f, 0.75f * Time.deltaTime);
             }
             else
             {
@@ -21,7 +26,7 @@ namespace Coreficent.Display
         {
             if (!TransitionInComplete())
             {
-                spriteRenderer.material.color += new Color(0.0f, 0.0f, 0.0f, 0.75f * Time.deltaTime);
+                SpriteRenderer.material.color += new Color(0.0f, 0.0f, 0.0f, 0.75f * Time.deltaTime);
             }
             else
             {
@@ -30,19 +35,19 @@ namespace Coreficent.Display
         }
         public override bool TransitionOutComplete()
         {
-            return spriteRenderer.material.color.a <= 0.01f;
+            return SpriteRenderer.material.color.a <= 0.01f;
         }
         public override bool TransitionInComplete()
         {
-            return spriteRenderer.material.color.a >= 0.99f;
+            return SpriteRenderer.material.color.a >= 0.99f;
         }
         public override void Maximize()
         {
-            spriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            SpriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         }
         public override void Minimize()
         {
-            spriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            SpriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
         }
     }
 }

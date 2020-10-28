@@ -5,13 +5,14 @@ namespace Coreficent.Display
 {
     public abstract class Piece : MonoBehaviour, ITransitionable
     {
-        protected readonly float rotationAngle = 90f;
-        protected readonly float boardAngle = 45f;
-
-        private readonly float space = 1f;
-        private Vector3 delta = new Vector3(1.0f, 1.0f, 1.0f);
         public int X { get; set; }
         public int Y { get; set; }
+
+        protected readonly float rotationAngle = 90.0f;
+        protected readonly float boardAngle = 45.0f;
+
+        private readonly float space = 1.0f;
+        private Vector3 delta = new Vector3(1.0f, 1.0f, 1.0f);
 
         public virtual void TransitionOut()
         {
@@ -53,10 +54,9 @@ namespace Coreficent.Display
         }
         protected void Reposition()
         {
-            transform.position += new Vector3(X * space - (Main.Main.Cells.GetLength(0) - 1) / 2f, Y * space - (Main.Main.Cells.GetLength(1) - 1) / 2f, 0f);
+            transform.position += new Vector3(X * space - (Main.Main.Cells.GetLength(0) - 1) / 2.0f, Y * space - (Main.Main.Cells.GetLength(1) - 1) / 2.0f, 0.0f);
             transform.RotateAround(transform.parent.position, Vector3.forward, boardAngle);
         }
-
         protected void RandomizeDelta()
         {
             delta *= Random.Range(0.5f, 2.0f);

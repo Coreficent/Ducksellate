@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Coreficent.Utility;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Coreficent.Audio
@@ -12,6 +13,8 @@ namespace Coreficent.Audio
 
         void Start()
         {
+            SanityCheck.Check(this, CCCP, FluffingADuck);
+
             PlayTrack(SceneManager.GetActiveScene());
             SceneManager.activeSceneChanged += UpdateMusic;
             FluffingADuck.Play();

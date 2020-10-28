@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Coreficent.Utility;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,36 +8,40 @@ namespace Coreficent.Display
 
     public class Cell : Piece
     {
+        public bool Disabled { get; set; }
+
         public SpriteRenderer SpriteRenderer;
         public AudioSource AudioSource;
 
         private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
-
-        private readonly Color colorDefault = new Color(1f, 1f, 1f, 1f);
-        private readonly Color colorHighlight = new Color(1f, 1.5f, 1f, 1f);
-        private readonly Color colorActivated = new Color(1.5f, 1f, 1f, 1f);
+        private readonly Color colorDefault = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        private readonly Color colorHighlight = new Color(1.0f, 1.5f, 1.0f, 1.0f);
+        private readonly Color colorActivated = new Color(1.5f, 1.0f, 1.0f, 1.0f);
         private readonly float speedMultiplier = 2.0f;
-
-        private float targetAngle = 0f;
-        private float direction = 1f;
+        private float direction = 1.0f;
+        private float angleSum = 0.0f;
         private bool activated = false;
-        public bool Disabled { get; set; }
 
         void Start()
         {
+            SanityCheck.Check(this, SpriteRenderer, AudioSource);
+
             RandomizeDelta();
             AudioSource.pitch = UnityEngine.Random.Range(0.8f, 1.25f);
             Reposition();
-            transform.eulerAngles += new Vector3(0f, 0f, -boardAngle);
+            transform.eulerAngles += new Vector3(0.0f, 0.0f, -boardAngle);
             CorrectAngle();
         }
         void Update()
         {
             if (activated)
             {
-                transform.Rotate(Vector3.forward * direction, rotationAngle * speedMultiplier * Time.deltaTime);
-                if (Mathf.Abs(transform.eulerAngles.z - targetAngle) < 7.5f * speedMultiplier)
+                float angleCurrent = rotationAngle * speedMultiplier * Time.deltaTime;
+                transform.Rotate(Vector3.forward * direction, angleCurrent);
+                angleSum += angleCurrent;
+                if (Mathf.Abs(angleSum) >= rotationAngle)
                 {
+                    angleSum = 0.0f;
                     Deactivate();
                 }
             }
@@ -50,12 +55,12 @@ namespace Coreficent.Display
                     SpriteRenderer.material.color = colorHighlight;
                     if (Input.GetMouseButtonDown(0))
                     {
-                        direction = 1f;
+                        direction = 1.0f;
                         Activate();
                     }
                     else if (Input.GetMouseButtonDown(1))
                     {
-                        direction = -1f;
+                        direction = -1.0f;
                         Activate();
                     }
                 }
@@ -102,10 +107,9 @@ namespace Coreficent.Display
         }
         private void Activate()
         {
-            targetAngle = CalculateTargetAngle();
             SpriteRenderer.material.color = colorActivated;
             AudioSource.volume = UnityEngine.Random.Range(0.75f, 1.0f);
-            AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f));
+            AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f / speedMultiplier));
             activated = true;
         }
         private void Deactivate()
@@ -114,14 +118,6 @@ namespace Coreficent.Display
             ColllectReactableCells();
             SpriteRenderer.material.color = colorDefault;
             activated = false;
-        }
-        private float CalculateTargetAngle()
-        {
-            float target = transform.eulerAngles.z + rotationAngle * direction;
-            target = target > 360f ? target - 360f : target;
-            target = target < 0f ? target + 360f : target;
-
-            return target;
         }
         private void CorrectAngle()
         {
@@ -150,7 +146,6 @@ namespace Coreficent.Display
             GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z + rotationAngle)])
         };
         }
-
         private bool CanReact(Cell candidate)
         {
             if (candidate)
@@ -184,7 +179,6 @@ namespace Coreficent.Display
                     return Main.Main.Cells[x, y];
                 }
             }
-
             return null;
         }
     }

@@ -5,31 +5,32 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Coreficent.Display;
 using Coreficent.Animation;
+using Coreficent.Utility;
 
 namespace Coreficent.Main
 {
     public class Main : MonoBehaviour
     {
+        public static readonly int INVALID_OFFSET = -1024;
         public static Cell[,] Cells = new Cell[0, 0];
         public static Queue<Cell> CellsActivated = new Queue<Cell>();
-        public static readonly int INVALID_OFFSET = -1024;
         public static MonoBehaviour Handler = null;
 
         private static bool gameBeat = false;
 
         public Cell Cell;
-        public Obstacle LilliePad;
-
         public GameObject Board;
-        public SpriteButton ButtonSkip;
+        public Obstacle LilyPad;
         public SpriteButton ButtonCredits;
+        public SpriteButton ButtonSkip;
 
         private enum State { Win, Run, Idle };
-
         private string sceneCurrent;
 
         void Start()
         {
+            SanityCheck.Check(this, Cell, LilyPad, Board, ButtonSkip, ButtonCredits);
+
             Handler = this;
             sceneCurrent = SceneManager.GetActiveScene().name;
             if (gameBeat || SceneType.TUTORIAL_REACT == sceneCurrent || SceneType.TUTORIAL_ROTATE == sceneCurrent)
@@ -120,7 +121,7 @@ namespace Coreficent.Main
                     Cells = new Cell[7, 7];
                     int rotateOffsetX = 1;
                     int rotateOffsetY = rotateOffsetX;
-                    board.transform.position = new Vector3(-5f, 0f, 0f);
+                    board.transform.position = new Vector3(-5.0f, 0.0f, 0.0f);
                     PopulateCell(board, 0 + rotateOffsetX, 4 + rotateOffsetY).RotateLeft();
                     PopulateCell(board, 1 + rotateOffsetX, 3 + rotateOffsetY).RotateRight().RotateRight();
                     PopulateCell(board, 2 + rotateOffsetX, 2 + rotateOffsetY).RotateLeft();
@@ -132,17 +133,17 @@ namespace Coreficent.Main
                     int max = 5;
                     for (int i = 0; i < max; ++i)
                     {
-                        PopulateObject(board, LilliePad, i, 0);
-                        PopulateObject(board, LilliePad, max - 1 + 2, i + 2);
+                        PopulateObject(board, LilyPad, i, 0);
+                        PopulateObject(board, LilyPad, max - 1 + 2, i + 2);
                     }
-                    PopulateObject(board, LilliePad, 6, 0);
+                    PopulateObject(board, LilyPad, 6, 0);
 
                     break;
                 case (SceneType.TUTORIAL_REACT):
                     Cells = new Cell[7, 7];
                     int ox = 1;
                     int oy = -1;
-                    board.transform.position = new Vector3(-1f, 0f, 0f);
+                    board.transform.position = new Vector3(-1.0f, 0.0f, 0.0f);
                     PopulateCell(board, 1 + ox, 5 + oy).RotateRight();
                     PopulateCell(board, 1 + ox, 6 + oy);
                     PopulateCell(board, 0 + ox, 5 + oy).RotateRight().RotateRight();
@@ -153,7 +154,7 @@ namespace Coreficent.Main
                     break;
                 case (SceneType.EASY):
                     Cells = new Cell[7, 7];
-                    board.transform.position = new Vector3(-4f, 0f, 0f);
+                    board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int i = 0; i < 6; ++i)
                     {
                         PopulateCell(board, 6, i + 1).RotateRight().RotateRight();
@@ -164,7 +165,7 @@ namespace Coreficent.Main
                     break;
                 case (SceneType.MEDIUM):
                     Cells = new Cell[7, 7];
-                    board.transform.position = new Vector3(-4f, 0f, 0f);
+                    board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int i = 0; i < 6; ++i)
                     {
                         PopulateCell(board, 0, i + 1).Randomize();
@@ -187,7 +188,7 @@ namespace Coreficent.Main
                 case (SceneType.HARD):
                     int size = 13;
                     Cells = new Cell[size, size];
-                    board.transform.position = new Vector3(-4f, 0f, 0f);
+                    board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int x = 0; x < size; ++x)
                     {
                         for (int y = 0; y < size; ++y)
@@ -249,7 +250,7 @@ namespace Coreficent.Main
                     {
                         if (condition(x, y))
                         {
-                            Obstacle currentCell = Instantiate(LilliePad, board.transform);
+                            Obstacle currentCell = Instantiate(LilyPad, board.transform);
                             currentCell.X = x;
                             currentCell.Y = y;
                         }
