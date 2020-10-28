@@ -111,8 +111,6 @@
                     }
                 }
             }
-
-
             return _state.Win;
         }
 
@@ -144,7 +142,6 @@
                     }
 
                     PopulateObject(board, LilyPad, 6, 0);
-
                     break;
                 case SceneType.TutorialReact:
                     Cells = new Cell[7, 7];
@@ -209,7 +206,6 @@
                             }
                         }
                     }
-
                     break;
                 case SceneType.Credits:
                 case SceneType.Replay:
@@ -227,12 +223,9 @@
         private Piece PopulateObject(GameObject currentBoard, Piece gameObject, int x, int y)
         {
             Piece result = Instantiate(gameObject, currentBoard.transform);
-
             result.X = x;
             result.Y = y;
-
             result.name = "decor" + " " + x + ":" + y;
-
             return result;
         }
 
@@ -252,7 +245,6 @@
                 cell.name = "degenerate cell:" + x + ":" + y;
                 Debug.Log("cell already populated at: " + x + ":" + y);
             }
-
             return cell;
         }
 

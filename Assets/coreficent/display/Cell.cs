@@ -150,7 +150,6 @@
                     cells.Add(cell);
                 }
             }
-
             return cells;
         }
 
@@ -175,7 +174,6 @@
                     }
                 }
             }
-
             return false;
         }
 
