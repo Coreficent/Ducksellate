@@ -101,8 +101,11 @@ namespace Coreficent.Display
 
             foreach (Cell cell in reactableCells)
             {
-                cell._direction = _direction;
-                Main.Main.CellsActivated.Enqueue(cell);
+                if (!cell._activated)
+                {
+                    cell._direction = _direction;
+                    Main.Main.CellsActivated.Enqueue(cell);
+                }
             }
         }
         private void Activate()
