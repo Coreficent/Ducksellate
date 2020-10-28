@@ -1,10 +1,9 @@
-﻿using Coreficent.Utility;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Coreficent.Display
+﻿namespace Coreficent.Display
 {
+    using Coreficent.Utility;
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
 
     public class Cell : Piece
     {
@@ -32,6 +31,7 @@ namespace Coreficent.Display
             transform.eulerAngles += new Vector3(0.0f, 0.0f, -boardAngle);
             CorrectAngle();
         }
+
         void Update()
         {
             if (_activated)
@@ -46,6 +46,7 @@ namespace Coreficent.Display
                 }
             }
         }
+
         void OnMouseOver()
         {
             if (!Disabled)
@@ -66,28 +67,34 @@ namespace Coreficent.Display
                 }
             }
         }
+
         public void Randomize()
         {
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, UnityEngine.Random.Range(0, 4) * rotationAngle);
         }
+
         public Cell RotateLeft()
         {
             transform.eulerAngles += new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, rotationAngle);
             return this;
         }
+
         public Cell RotateRight()
         {
             transform.eulerAngles += new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -rotationAngle);
             return this;
         }
+
         public void React()
         {
             Activate();
         }
+
         public bool Tessellated()
         {
             return FindReactOffset(transform.eulerAngles.z) == 1 || (X == Main.Main.InvalidOffset && Y == Main.Main.InvalidOffset);
         }
+
         private void OnMouseExit()
         {
             if (!_activated)
@@ -95,6 +102,7 @@ namespace Coreficent.Display
                 SpriteRenderer.material.color = _colorDefault;
             }
         }
+
         private void ColllectReactableCells()
         {
             List<Cell> reactableCells = FindReactableCells();
@@ -108,6 +116,7 @@ namespace Coreficent.Display
                 }
             }
         }
+
         private void Activate()
         {
             SpriteRenderer.material.color = _colorActivated;
@@ -115,6 +124,7 @@ namespace Coreficent.Display
             AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f / _speedMultiplier));
             _activated = true;
         }
+
         private void Deactivate()
         {
             CorrectAngle();
@@ -122,11 +132,13 @@ namespace Coreficent.Display
             SpriteRenderer.material.color = _colorDefault;
             _activated = false;
         }
+
         private void CorrectAngle()
         {
             // prevents inaccuracy over many iterations due to floating point mathematics
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, Mathf.Round(transform.eulerAngles.z / rotationAngle) * rotationAngle);
         }
+
         private List<Cell> FindReactableCells()
         {
             List<Cell> cells = new List<Cell>();
@@ -141,6 +153,7 @@ namespace Coreficent.Display
 
             return cells;
         }
+
         private List<Cell> FindCandidateCells(Cell originCell)
         {
             return new List<Cell>
@@ -149,6 +162,7 @@ namespace Coreficent.Display
             GetCell(originCell, _reactSites[FindReactOffset(originCell.transform.eulerAngles.z + rotationAngle)])
         };
         }
+
         private bool CanReact(Cell candidate)
         {
             if (candidate)
@@ -164,6 +178,7 @@ namespace Coreficent.Display
 
             return false;
         }
+
         private int FindReactOffset(float angle)
         {
             int offset = (int)Mathf.Round(angle / rotationAngle);
@@ -171,6 +186,7 @@ namespace Coreficent.Display
             offset = offset > 3 ? offset - 4 : offset;
             return offset;
         }
+
         private Cell GetCell(Cell originCell, Tuple<int, int> coordinate)
         {
             int x = originCell.X + coordinate.Item1;

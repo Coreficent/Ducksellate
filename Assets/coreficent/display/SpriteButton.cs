@@ -1,17 +1,19 @@
-﻿using Coreficent.Animation;
-using Coreficent.Utility;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
-namespace Coreficent.Display
+﻿namespace Coreficent.Display
 {
+    using Coreficent.Animation;
+    using Coreficent.Utility;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+
     public class SpriteButton : MonoBehaviour
     {
         public string Scene;
+
         void Start()
         {
             SanityCheck.Check(this, Scene);
         }
+
         void OnMouseOver()
         {
             if (Input.GetMouseButtonDown(0))

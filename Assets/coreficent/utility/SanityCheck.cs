@@ -1,11 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-
-namespace Coreficent.Utility
+﻿namespace Coreficent.Utility
 {
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+
     public class SanityCheck
     {
         public static bool DebugMod = false;
+
         public static void Check(object owner, params object[] variables)
         {
             bool sanityCheckPassed = true;
@@ -17,6 +18,7 @@ namespace Coreficent.Utility
                     Debug.Log(owner + "::" + "has an unexpected null variable in" + "::" + SceneManager.GetActiveScene().name);
                 }
             }
+
             if (DebugMod && sanityCheckPassed)
             {
                 Debug.Log(owner + "::" + "sanity check passed.");
@@ -24,4 +26,3 @@ namespace Coreficent.Utility
         }
     }
 }
-

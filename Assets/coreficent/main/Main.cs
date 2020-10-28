@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Coreficent.Display;
-using Coreficent.Animation;
-using Coreficent.Utility;
-
-namespace Coreficent.Main
+﻿namespace Coreficent.Main
 {
+    using Coreficent.Animation;
+    using Coreficent.Display;
+    using Coreficent.Utility;
+    using System.Collections.Generic;
+    using System;
+    using UnityEngine.SceneManagement;
+    using UnityEngine;
+
     public class Main : MonoBehaviour
     {
         public static readonly int InvalidOffset = -1024;
@@ -24,8 +23,9 @@ namespace Coreficent.Main
         public SpriteButton ButtonCredits;
         public SpriteButton ButtonSkip;
 
-        private enum _state { Win, Run, Idle };
         private string _sceneCurrent;
+
+        private enum _state { Win, Run, Idle }
 
         void Start()
         {
@@ -40,10 +40,12 @@ namespace Coreficent.Main
                     Instantiate(ButtonSkip);
                 }
             }
+
             if (_gameBeat && SceneType.Menu == _sceneCurrent)
             {
                 Instantiate(ButtonCredits);
             }
+
             GenerateLevel();
         }
 
@@ -56,6 +58,7 @@ namespace Coreficent.Main
                     {
                         _gameBeat = true;
                     }
+
                     DisableCells();
                     Transitioner.TransitionOut();
 
@@ -65,6 +68,7 @@ namespace Coreficent.Main
                     {
                         CellsActivated.Dequeue().React();
                     }
+
                     break;
                 case _state.Idle:
                     break;
@@ -86,8 +90,10 @@ namespace Coreficent.Main
                     }
                 }
             }
+
             enabled = false;
         }
+
         private _state GetState()
         {
             if (Cells.GetLength(0) == 0 && Cells.GetLength(1) == 0)
@@ -117,7 +123,7 @@ namespace Coreficent.Main
 
             switch (_sceneCurrent)
             {
-                case (SceneType.TutorialRotate):
+                case SceneType.TutorialRotate:
                     Cells = new Cell[7, 7];
                     int rotateOffsetX = 1;
                     int rotateOffsetY = rotateOffsetX;
@@ -136,10 +142,11 @@ namespace Coreficent.Main
                         PopulateObject(board, LilyPad, i, 0);
                         PopulateObject(board, LilyPad, max - 1 + 2, i + 2);
                     }
+
                     PopulateObject(board, LilyPad, 6, 0);
 
                     break;
-                case (SceneType.TutorialReact):
+                case SceneType.TutorialReact:
                     Cells = new Cell[7, 7];
                     int ox = 1;
                     int oy = -1;
@@ -152,7 +159,7 @@ namespace Coreficent.Main
                     PopulateCell(board, 3, 3);
                     FillObstacles(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
                     break;
-                case (SceneType.Easy):
+                case SceneType.Easy:
                     Cells = new Cell[7, 7];
                     board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int i = 0; i < 6; ++i)
@@ -160,10 +167,11 @@ namespace Coreficent.Main
                         PopulateCell(board, 6, i + 1).RotateRight().RotateRight();
                         PopulateCell(board, i, 0);
                     }
+
                     PopulateCell(board, 6, 0).RotateLeft();
                     FillObstacles(board, (x, y) => x - y > -1);
                     break;
-                case (SceneType.Medium):
+                case SceneType.Medium:
                     Cells = new Cell[7, 7];
                     board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int i = 0; i < 6; ++i)
@@ -173,6 +181,7 @@ namespace Coreficent.Main
                         PopulateCell(board, i, 0).Randomize();
                         PopulateCell(board, i + 1, 6).Randomize();
                     }
+
                     int offsetInner = 2;
                     for (int i = 0; i < 2; ++i)
                     {
@@ -181,11 +190,12 @@ namespace Coreficent.Main
                         PopulateCell(board, i + offsetInner, 0 + offsetInner).Randomize();
                         PopulateCell(board, i + offsetInner + 1, 2 + offsetInner).Randomize();
                     }
+
                     PopulateCell(board, 3, 3).Randomize();
 
                     FillObstacles(board, (x, y) => true);
                     break;
-                case (SceneType.Hard):
+                case SceneType.Hard:
                     int size = 13;
                     Cells = new Cell[size, size];
                     board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
@@ -199,18 +209,21 @@ namespace Coreficent.Main
                             }
                         }
                     }
+
                     break;
-                case (SceneType.Credits):
-                case (SceneType.Replay):
-                case (SceneType.Menu):
+                case SceneType.Credits:
+                case SceneType.Replay:
+                case SceneType.Menu:
                     Cells = new Cell[0, 0];
                     break;
                 default:
                     Debug.Log("unexpected level");
                     break;
             }
+
             Transitioner.TransitionIn();
         }
+
         private Piece PopulateObject(GameObject currentBoard, Piece gameObject, int x, int y)
         {
             Piece result = Instantiate(gameObject, currentBoard.transform);
@@ -222,6 +235,7 @@ namespace Coreficent.Main
 
             return result;
         }
+
         private Cell PopulateCell(GameObject currentBoard, int x, int y)
         {
             Cell cell = Instantiate(Cell, currentBoard.transform);
@@ -238,8 +252,10 @@ namespace Coreficent.Main
                 cell.name = "degenerate cell:" + x + ":" + y;
                 Debug.Log("cell already populated at: " + x + ":" + y);
             }
+
             return cell;
         }
+
         private void FillObstacles(GameObject board, Func<int, int, bool> condition)
         {
             for (int x = 0; x < Cells.GetLength(0); ++x)

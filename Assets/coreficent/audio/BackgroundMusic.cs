@@ -1,9 +1,10 @@
-﻿using Coreficent.Utility;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
-namespace Coreficent.Audio
+﻿namespace Coreficent.Audio
 {
+    using Coreficent.Display;
+    using Coreficent.Utility;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+
     public class BackgroundMusic : MonoBehaviour
     {
         public AudioSource CCCP;
@@ -19,6 +20,7 @@ namespace Coreficent.Audio
             SceneManager.activeSceneChanged += UpdateMusic;
             FluffingADuck.Play();
         }
+
         private void Awake()
         {
             if (!_backgroundMusic)
@@ -33,13 +35,15 @@ namespace Coreficent.Audio
             }
             Destroy(gameObject);
         }
+
         private void UpdateMusic(Scene current, Scene next)
         {
             PlayTrack(next);
         }
+
         private void PlayTrack(Scene scene)
         {
-            if (Display.SceneType.Credits == scene.name)
+            if (SceneType.Credits == scene.name)
             {
                 if (FluffingADuck.isPlaying)
                 {

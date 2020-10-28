@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using UnityEngine.SceneManagement;
-using Coreficent.Display;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Coreficent.Animation
+﻿namespace Coreficent.Animation
 {
+    using Coreficent.Display;
+    using System.Collections.Generic;
+    using System.Collections;
+    using System.Linq;
+    using UnityEngine.SceneManagement;
+    using UnityEngine;
+
     public class Transitioner : MonoBehaviour
     {
         public static void TransitionIn()
@@ -14,11 +14,13 @@ namespace Coreficent.Animation
             Main.Main.Handler.StopAllCoroutines();
             Main.Main.Handler.StartCoroutine(TransitionRoutineIn());
         }
+
         public static void TransitionOut(string scene = null)
         {
             Main.Main.Handler.StopAllCoroutines();
             Main.Main.Handler.StartCoroutine(TransitionRoutineOut(scene));
         }
+
         private static IEnumerator TransitionRoutineIn()
         {
             List<ITransitionable> transitionables = FindTransitionables();
@@ -41,9 +43,11 @@ namespace Coreficent.Animation
                         transitionInComplete = false;
                     }
                 }
+
                 yield return null;
             } while (!transitionInComplete);
         }
+
         private static IEnumerator TransitionRoutineOut(string scene = null)
         {
             List<ITransitionable> transitionables = FindTransitionables();
@@ -61,6 +65,7 @@ namespace Coreficent.Animation
                         transitionOutComplete = false;
                     }
                 }
+
                 yield return null;
             } while (!transitionOutComplete);
 
@@ -73,10 +78,10 @@ namespace Coreficent.Animation
                 SceneManager.LoadScene(scene);
             }
         }
+
         private static List<ITransitionable> FindTransitionables()
         {
-            return new List<MonoBehaviour>(FindObjectsOfType<MonoBehaviour>()).Where(i => i is ITransitionable).Select(i => (ITransitionable)i).ToList(); ;
+            return new List<MonoBehaviour>(FindObjectsOfType<MonoBehaviour>()).Where(i => i is ITransitionable).Select(i => (ITransitionable)i).ToList(); 
         }
     }
 }
-
