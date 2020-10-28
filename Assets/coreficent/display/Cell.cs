@@ -13,14 +13,14 @@ namespace Coreficent.Display
         public SpriteRenderer SpriteRenderer;
         public AudioSource AudioSource;
 
-        private readonly Tuple<int, int>[] reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
-        private readonly Color colorDefault = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        private readonly Color colorHighlight = new Color(1.0f, 1.5f, 1.0f, 1.0f);
-        private readonly Color colorActivated = new Color(1.5f, 1.0f, 1.0f, 1.0f);
-        private readonly float speedMultiplier = 2.0f;
-        private float direction = 1.0f;
-        private float angleSum = 0.0f;
-        private bool activated = false;
+        private readonly Tuple<int, int>[] _reactSites = { new Tuple<int, int>(-1, 0), new Tuple<int, int>(0, -1), new Tuple<int, int>(1, 0), new Tuple<int, int>(0, 1) };
+        private readonly Color _colorDefault = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        private readonly Color _colorHighlight = new Color(1.0f, 1.5f, 1.0f, 1.0f);
+        private readonly Color _colorActivated = new Color(1.5f, 1.0f, 1.0f, 1.0f);
+        private readonly float _speedMultiplier = 2.0f;
+        private float _direction = 1.0f;
+        private float _angleSum = 0.0f;
+        private bool _activated = false;
 
         void Start()
         {
@@ -34,14 +34,14 @@ namespace Coreficent.Display
         }
         void Update()
         {
-            if (activated)
+            if (_activated)
             {
-                float angleCurrent = rotationAngle * speedMultiplier * Time.deltaTime;
-                transform.Rotate(Vector3.forward * direction, angleCurrent);
-                angleSum += angleCurrent;
-                if (Mathf.Abs(angleSum) >= rotationAngle)
+                float angleCurrent = rotationAngle * _speedMultiplier * Time.deltaTime;
+                transform.Rotate(Vector3.forward * _direction, angleCurrent);
+                _angleSum += angleCurrent;
+                if (Mathf.Abs(_angleSum) >= rotationAngle)
                 {
-                    angleSum = 0.0f;
+                    _angleSum = 0.0f;
                     Deactivate();
                 }
             }
@@ -50,17 +50,17 @@ namespace Coreficent.Display
         {
             if (!Disabled)
             {
-                if (!activated)
+                if (!_activated)
                 {
-                    SpriteRenderer.material.color = colorHighlight;
+                    SpriteRenderer.material.color = _colorHighlight;
                     if (Input.GetMouseButtonDown(0))
                     {
-                        direction = 1.0f;
+                        _direction = 1.0f;
                         Activate();
                     }
                     else if (Input.GetMouseButtonDown(1))
                     {
-                        direction = -1.0f;
+                        _direction = -1.0f;
                         Activate();
                     }
                 }
@@ -86,13 +86,13 @@ namespace Coreficent.Display
         }
         public bool Tessellated()
         {
-            return FindReactOffset(transform.eulerAngles.z) == 1 || (X == Main.Main.INVALID_OFFSET && Y == Main.Main.INVALID_OFFSET);
+            return FindReactOffset(transform.eulerAngles.z) == 1 || (X == Main.Main.InvalidOffset && Y == Main.Main.InvalidOffset);
         }
         private void OnMouseExit()
         {
-            if (!activated)
+            if (!_activated)
             {
-                SpriteRenderer.material.color = colorDefault;
+                SpriteRenderer.material.color = _colorDefault;
             }
         }
         private void ColllectReactableCells()
@@ -101,23 +101,23 @@ namespace Coreficent.Display
 
             foreach (Cell cell in reactableCells)
             {
-                cell.direction = direction;
+                cell._direction = _direction;
                 Main.Main.CellsActivated.Enqueue(cell);
             }
         }
         private void Activate()
         {
-            SpriteRenderer.material.color = colorActivated;
+            SpriteRenderer.material.color = _colorActivated;
             AudioSource.volume = UnityEngine.Random.Range(0.75f, 1.0f);
-            AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f / speedMultiplier));
-            activated = true;
+            AudioSource.PlayDelayed(UnityEngine.Random.Range(0.0f, 0.5f / _speedMultiplier));
+            _activated = true;
         }
         private void Deactivate()
         {
             CorrectAngle();
             ColllectReactableCells();
-            SpriteRenderer.material.color = colorDefault;
-            activated = false;
+            SpriteRenderer.material.color = _colorDefault;
+            _activated = false;
         }
         private void CorrectAngle()
         {
@@ -142,8 +142,8 @@ namespace Coreficent.Display
         {
             return new List<Cell>
         {
-            GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z)]),
-            GetCell(originCell, reactSites[FindReactOffset(originCell.transform.eulerAngles.z + rotationAngle)])
+            GetCell(originCell, _reactSites[FindReactOffset(originCell.transform.eulerAngles.z)]),
+            GetCell(originCell, _reactSites[FindReactOffset(originCell.transform.eulerAngles.z + rotationAngle)])
         };
         }
         private bool CanReact(Cell candidate)

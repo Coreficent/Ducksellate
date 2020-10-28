@@ -1,11 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Transactions;
-using UnityEngine;
-
-namespace Coreficent.Display
+﻿namespace Coreficent.Display
 {
-    public class Obstacle : Piece 
+    public class Obstacle : Piece
     {
         void Start()
         {

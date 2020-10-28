@@ -9,7 +9,7 @@ namespace Coreficent.Audio
         public AudioSource CCCP;
         public AudioSource FluffingADuck;
 
-        private static BackgroundMusic backgroundMusic = null;
+        private static BackgroundMusic _backgroundMusic = null;
 
         void Start()
         {
@@ -21,13 +21,13 @@ namespace Coreficent.Audio
         }
         private void Awake()
         {
-            if (!backgroundMusic)
+            if (!_backgroundMusic)
             {
-                backgroundMusic = this;
+                _backgroundMusic = this;
                 DontDestroyOnLoad(gameObject);
                 return;
             }
-            else if (backgroundMusic == this)
+            else if (_backgroundMusic == this)
             {
                 return;
             }
@@ -39,7 +39,7 @@ namespace Coreficent.Audio
         }
         private void PlayTrack(Scene scene)
         {
-            if (Display.SceneType.CREDITS == scene.name)
+            if (Display.SceneType.Credits == scene.name)
             {
                 if (FluffingADuck.isPlaying)
                 {

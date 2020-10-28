@@ -2,13 +2,13 @@
 {
     public class SceneType
     {
-        public const string TUTORIAL_ROTATE = "TutorialRotate";
-        public const string TUTORIAL_REACT = "TutorialReact";
-        public const string EASY = "Easy";
-        public const string MEDIUM = "Medium";
-        public const string HARD = "Hard";
-        public const string REPLAY = "Replay";
-        public const string CREDITS = "Credits";
-        public const string MENU = "Menu";
+        public const string TutorialRotate = "TutorialRotate";
+        public const string TutorialReact = "TutorialReact";
+        public const string Easy = "Easy";
+        public const string Medium = "Medium";
+        public const string Hard = "Hard";
+        public const string Replay = "Replay";
+        public const string Credits = "Credits";
+        public const string Menu = "Menu";
     }
 }

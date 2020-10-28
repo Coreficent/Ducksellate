@@ -11,12 +11,12 @@ namespace Coreficent.Main
 {
     public class Main : MonoBehaviour
     {
-        public static readonly int INVALID_OFFSET = -1024;
+        public static readonly int InvalidOffset = -1024;
         public static Cell[,] Cells = new Cell[0, 0];
         public static Queue<Cell> CellsActivated = new Queue<Cell>();
         public static MonoBehaviour Handler = null;
 
-        private static bool gameBeat = false;
+        private static bool _gameBeat = false;
 
         public Cell Cell;
         public GameObject Board;
@@ -24,23 +24,23 @@ namespace Coreficent.Main
         public SpriteButton ButtonCredits;
         public SpriteButton ButtonSkip;
 
-        private enum State { Win, Run, Idle };
-        private string sceneCurrent;
+        private enum _state { Win, Run, Idle };
+        private string _sceneCurrent;
 
         void Start()
         {
             SanityCheck.Check(this, Cell, LilyPad, Board, ButtonSkip, ButtonCredits);
 
             Handler = this;
-            sceneCurrent = SceneManager.GetActiveScene().name;
-            if (gameBeat || SceneType.TUTORIAL_REACT == sceneCurrent || SceneType.TUTORIAL_ROTATE == sceneCurrent)
+            _sceneCurrent = SceneManager.GetActiveScene().name;
+            if (_gameBeat || SceneType.TutorialReact == _sceneCurrent || SceneType.TutorialRotate == _sceneCurrent)
             {
-                if (SceneType.HARD != sceneCurrent && SceneType.REPLAY != sceneCurrent && SceneType.MENU != sceneCurrent && SceneType.CREDITS != sceneCurrent)
+                if (SceneType.Hard != _sceneCurrent && SceneType.Replay != _sceneCurrent && SceneType.Menu != _sceneCurrent && SceneType.Credits != _sceneCurrent)
                 {
                     Instantiate(ButtonSkip);
                 }
             }
-            if (gameBeat && SceneType.MENU == sceneCurrent)
+            if (_gameBeat && SceneType.Menu == _sceneCurrent)
             {
                 Instantiate(ButtonCredits);
             }
@@ -51,22 +51,22 @@ namespace Coreficent.Main
         {
             switch (GetState())
             {
-                case State.Win:
-                    if (SceneType.HARD == sceneCurrent)
+                case _state.Win:
+                    if (SceneType.Hard == _sceneCurrent)
                     {
-                        gameBeat = true;
+                        _gameBeat = true;
                     }
                     DisableCells();
                     Transitioner.TransitionOut();
 
                     break;
-                case State.Run:
+                case _state.Run:
                     while (CellsActivated.Count > 0)
                     {
                         CellsActivated.Dequeue().React();
                     }
                     break;
-                case State.Idle:
+                case _state.Idle:
                     break;
                 default:
                     Debug.Log("unexpected state");
@@ -88,11 +88,11 @@ namespace Coreficent.Main
             }
             enabled = false;
         }
-        private State GetState()
+        private _state GetState()
         {
             if (Cells.GetLength(0) == 0 && Cells.GetLength(1) == 0)
             {
-                return State.Idle;
+                return _state.Idle;
             }
 
             for (int x = 0; x < Cells.GetLength(0); ++x)
@@ -101,13 +101,13 @@ namespace Coreficent.Main
                 {
                     if (Cells[x, y] && !Cells[x, y].Tessellated())
                     {
-                        return State.Run;
+                        return _state.Run;
                     }
                 }
             }
 
 
-            return State.Win;
+            return _state.Win;
         }
 
         private void GenerateLevel()
@@ -115,9 +115,9 @@ namespace Coreficent.Main
             GameObject board = Instantiate(Board);
             board.name = "Board";
 
-            switch (sceneCurrent)
+            switch (_sceneCurrent)
             {
-                case (SceneType.TUTORIAL_ROTATE):
+                case (SceneType.TutorialRotate):
                     Cells = new Cell[7, 7];
                     int rotateOffsetX = 1;
                     int rotateOffsetY = rotateOffsetX;
@@ -139,7 +139,7 @@ namespace Coreficent.Main
                     PopulateObject(board, LilyPad, 6, 0);
 
                     break;
-                case (SceneType.TUTORIAL_REACT):
+                case (SceneType.TutorialReact):
                     Cells = new Cell[7, 7];
                     int ox = 1;
                     int oy = -1;
@@ -152,7 +152,7 @@ namespace Coreficent.Main
                     PopulateCell(board, 3, 3);
                     FillObstacles(board, (x, y) => !(x == 5 || x == 6 || y == 0 || y == 1) && x + y > 3 && x + y < 9);
                     break;
-                case (SceneType.EASY):
+                case (SceneType.Easy):
                     Cells = new Cell[7, 7];
                     board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int i = 0; i < 6; ++i)
@@ -163,7 +163,7 @@ namespace Coreficent.Main
                     PopulateCell(board, 6, 0).RotateLeft();
                     FillObstacles(board, (x, y) => x - y > -1);
                     break;
-                case (SceneType.MEDIUM):
+                case (SceneType.Medium):
                     Cells = new Cell[7, 7];
                     board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
                     for (int i = 0; i < 6; ++i)
@@ -185,7 +185,7 @@ namespace Coreficent.Main
 
                     FillObstacles(board, (x, y) => true);
                     break;
-                case (SceneType.HARD):
+                case (SceneType.Hard):
                     int size = 13;
                     Cells = new Cell[size, size];
                     board.transform.position = new Vector3(-4.0f, 0.0f, 0.0f);
@@ -200,9 +200,9 @@ namespace Coreficent.Main
                         }
                     }
                     break;
-                case (SceneType.CREDITS):
-                case (SceneType.REPLAY):
-                case (SceneType.MENU):
+                case (SceneType.Credits):
+                case (SceneType.Replay):
+                case (SceneType.Menu):
                     Cells = new Cell[0, 0];
                     break;
                 default:
@@ -234,7 +234,7 @@ namespace Coreficent.Main
             }
             else
             {
-                cell.X = cell.Y = INVALID_OFFSET;
+                cell.X = cell.Y = InvalidOffset;
                 cell.name = "degenerate cell:" + x + ":" + y;
                 Debug.Log("cell already populated at: " + x + ":" + y);
             }
