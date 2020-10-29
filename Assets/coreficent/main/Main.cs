@@ -111,6 +111,7 @@
                     }
                 }
             }
+
             return _state.Win;
         }
 
@@ -226,6 +227,7 @@
             result.X = x;
             result.Y = y;
             result.name = "decor" + " " + x + ":" + y;
+
             return result;
         }
 
@@ -245,6 +247,7 @@
                 cell.name = "degenerate cell:" + x + ":" + y;
                 Debug.Log("cell already populated at: " + x + ":" + y);
             }
+
             return cell;
         }
 
