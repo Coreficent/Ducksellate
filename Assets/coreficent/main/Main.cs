@@ -22,10 +22,9 @@
         public Obstacle LilyPad;
         public SpriteButton ButtonCredits;
         public SpriteButton ButtonSkip;
+        public enum State { Win, Run, Idle }
 
         private string _sceneCurrent;
-
-        private enum _state { Win, Run, Idle }
 
         void Start()
         {
@@ -53,7 +52,7 @@
         {
             switch (GetState())
             {
-                case _state.Win:
+                case State.Win:
                     if (SceneType.Hard == _sceneCurrent)
                     {
                         _gameBeat = true;
@@ -63,14 +62,14 @@
                     Transitioner.TransitionOut();
 
                     break;
-                case _state.Run:
+                case State.Run:
                     while (CellsActivated.Count > 0)
                     {
                         CellsActivated.Dequeue().React();
                     }
 
                     break;
-                case _state.Idle:
+                case State.Idle:
                     break;
                 default:
                     Debug.Log("unexpected state");
@@ -94,11 +93,11 @@
             enabled = false;
         }
 
-        private _state GetState()
+        private State GetState()
         {
             if (Cells.GetLength(0) == 0 && Cells.GetLength(1) == 0)
             {
-                return _state.Idle;
+                return State.Idle;
             }
 
             for (int x = 0; x < Cells.GetLength(0); ++x)
@@ -107,12 +106,12 @@
                 {
                     if (Cells[x, y] && !Cells[x, y].Tessellated())
                     {
-                        return _state.Run;
+                        return State.Run;
                     }
                 }
             }
 
-            return _state.Win;
+            return State.Win;
         }
 
         private void GenerateLevel()

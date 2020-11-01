@@ -13,7 +13,12 @@
         protected readonly float boardAngle = 45.0f;
 
         private readonly float space = 1.0f;
+        private readonly float scaleMaxThreshold = 0.99f;
+        private readonly float scaleMinThreshold = 0.01f;
         private Vector3 delta = new Vector3(1.0f, 1.0f, 1.0f);
+        private Vector3 scaleMax = new Vector3(1.0f, 1.0f, 1.0f);
+        private Vector3 scaleMin = new Vector3(0.0f, 0.0f, 0.0f);
+
 
         public virtual void TransitionOut()
         {
@@ -41,22 +46,22 @@
 
         public virtual bool TransitionOutComplete()
         {
-            return transform.localScale.x <= 0.01 && transform.localScale.y <= 0 && transform.localScale.z <= 0.01;
+            return transform.localScale.x <= scaleMinThreshold && transform.localScale.y <= scaleMinThreshold && transform.localScale.z <= scaleMinThreshold;
         }
 
         public virtual bool TransitionInComplete()
         {
-            return transform.localScale.x >= 0.99 && transform.localScale.y >= 1.0 && transform.localScale.z >= 0.99;
+            return transform.localScale.x >= scaleMaxThreshold && transform.localScale.y >= scaleMaxThreshold && transform.localScale.z >= scaleMaxThreshold;
         }
 
         public virtual void Maximize()
         {
-            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            transform.localScale = scaleMax;
         }
 
         public virtual void Minimize()
         {
-            transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            transform.localScale = scaleMin;
         }
 
         protected void Reposition()

@@ -7,6 +7,9 @@
     {
         public SpriteRenderer SpriteRenderer;
 
+        private Color colorMax = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        private Color colorMin = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+
         void Start()
         {
             SanityCheck.Check(this, SpriteRenderer);
@@ -48,12 +51,12 @@
 
         public override void Maximize()
         {
-            SpriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            SpriteRenderer.material.color = colorMax;
         }
 
         public override void Minimize()
         {
-            SpriteRenderer.material.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            SpriteRenderer.material.color = colorMin;
         }
     }
 }
